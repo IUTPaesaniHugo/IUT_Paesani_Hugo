@@ -23,11 +23,6 @@ int main(void) {
     // Boucle Principale
     /****************************************************************************************************/
     while (1) {
-        if(LED_BLANCHE==1){
-            LED_BLANCHE=0;
-        }
-        else{
-            LED_BLANCHE=1;
-        }
-    } // fin main
-}
+        LED_BLANCHE = !LED_BLANCHE;
+    } 
+}// fin main

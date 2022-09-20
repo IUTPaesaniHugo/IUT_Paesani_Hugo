@@ -14,8 +14,8 @@ void InitTimer23(void) {
     T2CONbits.TCKPS = 0b00; // Select 1:8 Prescaler
     TMR3 = 0x00; // Clear 32-bit Timer (msw)
     TMR2 = 0x00; // Clear 32-bit Timer (lsw)
-    PR3 = 0x04C4; // Load 32-bit period value (msw)
-    PR2 = 0xB400; // Load 32-bit period value (lsw)
+    PR3 = 0x0BEB; // Load 32-bit period value (msw)
+    PR2 = 0xC200; // Load 32-bit period value (lsw)
     IPC2bits.T3IP = 0x01; // Set Timer3 Interrupt Priority Level
     IFS0bits.T3IF = 0; // Clear Timer3 Interrupt Flag
     IEC0bits.T3IE = 1; // Enable Timer3 interrupt
@@ -25,32 +25,42 @@ void InitTimer23(void) {
 
 //Interruption du timer 32 bits sur 2-3
 
-void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {
+void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {   //0,2Hz
     IFS0bits.T3IF = 0; // Clear Timer3 Interrupt Flag
     LED_ORANGE = !LED_ORANGE;
-    if (tour == 0) {
-        PWMSetSpeed(30, MOTEUR_DROIT);
-        PWMSetSpeed(30, MOTEUR_GAUCHE);
+    //if (tour == 0) {
+    //  PWMSetSpeed(30, MOTEUR_DROIT);
+    //  PWMSetSpeed(30, MOTEUR_GAUCHE);
+    //  tour = 1;
+  //} else {
+  //    PWMSetSpeed(-30, MOTEUR_DROIT);
+  //    PWMSetSpeed(-30, MOTEUR_GAUCHE);
+  //    tour = 0;
+  //}
+    if(tour == 0){
+        PWMSetSpeedConsigne(30, MOTEUR_GAUCHE);
+        PWMSetSpeedConsigne(30, MOTEUR_DROIT);
         tour = 1;
-    } else {
-        PWMSetSpeed(-30, MOTEUR_DROIT);
-        PWMSetSpeed(-30, MOTEUR_GAUCHE);
-        tour = 0;
+    }
+    else{
+        PWMSetSpeedConsigne(-30, MOTEUR_GAUCHE);
+        PWMSetSpeedConsigne(-30, MOTEUR_DROIT);
+        tour=0;
     }
 }
 
 //Initialisation d?un timer 16 bits
 
-void InitTimer1(void) {
+void InitTimer1(void) {     //Fréquence de 100Hz
     //Timer1 pour horodater les mesures (1ms)
     T1CONbits.TON = 0; // Disable Timer
-    T1CONbits.TCKPS = 0b11; //Prescaler
+    T1CONbits.TCKPS = 0b10; //Prescaler
     //11 = 1:256 prescale value
     //10 = 1:64 prescale value
     //01 = 1:8 prescale value
     //00 = 1:1 prescale value
     T1CONbits.TCS = 0; //clock source = internal clock
-    PR1 = 0x0C35;
+    PR1 = 0x186A;
 
     IFS0bits.T1IF = 0; // Clear Timer Interrupt Flag
     IEC0bits.T1IE = 1; // Enable Timer interrupt
@@ -62,4 +72,5 @@ void InitTimer1(void) {
 void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     IFS0bits.T1IF = 0;
     LED_BLANCHE = !LED_BLANCHE;
+    PWMUpdateSpeed();
 }

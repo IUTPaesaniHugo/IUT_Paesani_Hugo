@@ -10,6 +10,8 @@
       <itemPath>Robot.h</itemPath>
       <itemPath>ToolBox.h</itemPath>
       <itemPath>PWM.h</itemPath>
+      <itemPath>adc.h</itemPath>
+      <itemPath>main.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -31,6 +33,7 @@
     <itemPath>Robot.c</itemPath>
     <itemPath>ToolBox.c</itemPath>
     <itemPath>PWM.c</itemPath>
+    <itemPath>adc.c</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

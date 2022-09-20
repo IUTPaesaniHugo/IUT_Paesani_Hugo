@@ -4,6 +4,7 @@
 
 #define MOTEUR_GAUCHE 0
 #define MOTEUR_DROIT 1
+
 float vitesseEnPourcents;
 uint16_t moteur;
 

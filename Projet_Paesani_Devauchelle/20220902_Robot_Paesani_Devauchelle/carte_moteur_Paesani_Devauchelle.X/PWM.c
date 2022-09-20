@@ -8,7 +8,7 @@
 
 #define PWMPER 40.0
 
-unsigned char acceleration = 20;
+unsigned char acceleration = 5;
 
 void InitPWM(void) {
     PTCON2bits.PCLKDIV = 0b000; //Divide by 1
@@ -30,7 +30,7 @@ void InitPWM(void) {
     PTCONbits.PTEN = 1;
 }
 
-void PWMSetSpeed(float vitesseEnPourcents, uint16_t moteur) {
+//void PWMSetSpeed(float vitesseEnPourcents, uint16_t moteur) {
 //    if (moteur == MOTEUR_GAUCHE) {
 //        if (vitesseEnPourcents >= 0) {
 //            robotState.vitesseGaucheCommandeCourante = vitesseEnPourcents;
@@ -60,18 +60,18 @@ void PWMSetSpeed(float vitesseEnPourcents, uint16_t moteur) {
 //          MOTEUR_DROIT_DUTY_CYCLE = Abs(robotState.vitesseDroiteCommandeCourante * PWMPER);
 //      }
 //  }
-}
+//}
 
 void PWMUpdateSpeed()
 {
-// Cette fonction est appelée sur timer et permet de suivre des rampes d?accélération
+// Cette fonction est appelée sur timer et permet de suivre des rampes d'accélération
 if (robotState.vitesseDroiteCommandeCourante < robotState.vitesseDroiteConsigne)
 robotState.vitesseDroiteCommandeCourante = Min(
 robotState.vitesseDroiteCommandeCourante + acceleration,
 robotState.vitesseDroiteConsigne);
 if (robotState.vitesseDroiteCommandeCourante > robotState.vitesseDroiteConsigne)
 robotState.vitesseDroiteCommandeCourante = Max(
-robotState.vitesseDroiteCommandeCourante ? acceleration,
+robotState.vitesseDroiteCommandeCourante - acceleration,
 robotState.vitesseDroiteConsigne);
 
 if (robotState.vitesseDroiteCommandeCourante > 0)
@@ -94,7 +94,7 @@ robotState.vitesseGaucheCommandeCourante + acceleration,
 robotState.vitesseGaucheConsigne);
 if (robotState.vitesseGaucheCommandeCourante > robotState.vitesseGaucheConsigne)
 robotState.vitesseGaucheCommandeCourante = Max(
-robotState.vitesseGaucheCommandeCourante ? acceleration,
+robotState.vitesseGaucheCommandeCourante - acceleration,
 robotState.vitesseGaucheConsigne);
 
 if (robotState.vitesseGaucheCommandeCourante > 0)

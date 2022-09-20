@@ -7,6 +7,11 @@
 #include "robot.h"
 #include "ToolBox.h"
 #include "PWM.h"
+#include "adc.h"
+
+unsigned int ADCValue0;
+unsigned int ADCValue1;
+unsigned int ADCValue2;
 
 int main(void) {
     /***************************************************************************************************/
@@ -36,8 +41,20 @@ int main(void) {
     InitPWM();
     
     /****************************************************************************************************/
+    // Initialisation Convertisseur ADC
+    /****************************************************************************************************/
+    InitADC1();
+    /****************************************************************************************************/
     // Boucle Principale
     /****************************************************************************************************/
     while (1) {
+        if(ADCIsConversionFinished())
+        {
+            ADCClearConversionFinishedFlag();
+            unsigned int * result = ADCGetResult();
+            ADCValue0 = result[0];
+            ADCValue1 = result[1];
+            ADCValue2 = result[2];
+        }
     }
 }// fin main

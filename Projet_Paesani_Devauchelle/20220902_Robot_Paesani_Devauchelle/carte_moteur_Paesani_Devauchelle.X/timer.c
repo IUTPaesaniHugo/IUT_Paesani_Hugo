@@ -2,6 +2,7 @@
 #include "timer.h"
 #include "IO.h"
 #include "PWM.h"
+#include "adc.h"
 
 uint16_t tour = 0;
 //Initialisation d?un timer 32 bits
@@ -37,16 +38,16 @@ void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {   //0,2Hz
   //    PWMSetSpeed(-30, MOTEUR_GAUCHE);
   //    tour = 0;
   //}
-    if(tour == 0){
-        PWMSetSpeedConsigne(30, MOTEUR_GAUCHE);
-        PWMSetSpeedConsigne(30, MOTEUR_DROIT);
-        tour = 1;
-    }
-    else{
-        PWMSetSpeedConsigne(-30, MOTEUR_GAUCHE);
-        PWMSetSpeedConsigne(-30, MOTEUR_DROIT);
-        tour=0;
-    }
+  //  if(tour == 0){
+  //      PWMSetSpeedConsigne(37, MOTEUR_GAUCHE);
+  //      PWMSetSpeedConsigne(37, MOTEUR_DROIT);
+  //      tour = 1;
+  //  }
+  //  else{
+  //      PWMSetSpeedConsigne(-37, MOTEUR_GAUCHE);
+  //      PWMSetSpeedConsigne(-37, MOTEUR_DROIT);
+  //      tour=0;
+  //  }
 }
 
 //Initialisation d?un timer 16 bits
@@ -72,5 +73,6 @@ void InitTimer1(void) {     //Fréquence de 100Hz
 void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     IFS0bits.T1IF = 0;
     LED_BLANCHE = !LED_BLANCHE;
-    PWMUpdateSpeed();
+    //PWMUpdateSpeed();
+    ADC1StartConversionSequence();
 }

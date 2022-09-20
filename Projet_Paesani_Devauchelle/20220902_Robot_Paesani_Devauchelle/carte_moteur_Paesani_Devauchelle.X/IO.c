@@ -58,8 +58,8 @@ void InitIO()
 
 
     //********** Configuration des entrées : _TRISxx = 1 ********************************   
-
-    
-
+    _TRISC0 = 1;
+    _TRISC11 = 1;
+    _TRISG9 = 1;
 }
 

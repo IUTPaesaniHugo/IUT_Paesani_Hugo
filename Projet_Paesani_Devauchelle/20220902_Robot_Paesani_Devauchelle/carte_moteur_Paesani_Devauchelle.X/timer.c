@@ -28,7 +28,7 @@ void InitTimer23(void) {
 
 void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {   //0,2Hz
     IFS0bits.T3IF = 0; // Clear Timer3 Interrupt Flag
-    LED_ORANGE = !LED_ORANGE;
+    //LED_ORANGE = !LED_ORANGE;
     //if (tour == 0) {
     //  PWMSetSpeed(30, MOTEUR_DROIT);
     //  PWMSetSpeed(30, MOTEUR_GAUCHE);
@@ -52,16 +52,16 @@ void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {   //0,2Hz
 
 //Initialisation d?un timer 16 bits
 
-void InitTimer1(void) {     //Fréquence de 100Hz
+void InitTimer1(void) {     //Fréquence de 150Hz
     //Timer1 pour horodater les mesures (1ms)
     T1CONbits.TON = 0; // Disable Timer
-    T1CONbits.TCKPS = 0b10; //Prescaler
+    T1CONbits.TCKPS = 0b11; //Prescaler
     //11 = 1:256 prescale value
     //10 = 1:64 prescale value
     //01 = 1:8 prescale value
     //00 = 1:1 prescale value
     T1CONbits.TCS = 0; //clock source = internal clock
-    PR1 = 0x186A;
+    PR1 = 0x0412;
 
     IFS0bits.T1IF = 0; // Clear Timer Interrupt Flag
     IEC0bits.T1IE = 1; // Enable Timer interrupt
@@ -72,7 +72,7 @@ void InitTimer1(void) {     //Fréquence de 100Hz
 
 void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     IFS0bits.T1IF = 0;
-    LED_BLANCHE = !LED_BLANCHE;
+    //LED_BLANCHE = !LED_BLANCHE;
     //PWMUpdateSpeed();
     ADC1StartConversionSequence();
 }

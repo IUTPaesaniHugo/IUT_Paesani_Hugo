@@ -8,6 +8,7 @@
 #include "ToolBox.h"
 #include "PWM.h"
 #include "adc.h"
+#include "main.h"
 
 unsigned int ADCValue0;
 unsigned int ADCValue1;

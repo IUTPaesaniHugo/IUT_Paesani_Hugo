@@ -34,6 +34,7 @@
 #define OBSTACLE_EN_FACE 3
 #define OBSTACLE_A_GAUCHEVP 4
 #define OBSTACLE_A_DROITEVP 5
+#define OBSTACLE_EN_FACEVP 6
 
 
 void SetNextRobotStateInAutomaticMode();

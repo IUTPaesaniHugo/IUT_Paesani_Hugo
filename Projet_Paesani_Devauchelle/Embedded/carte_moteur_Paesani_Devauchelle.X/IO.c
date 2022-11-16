@@ -58,10 +58,16 @@ void InitIO()
 
 
     //********** Configuration des entrées : _TRISxx = 1 ********************************   
-    _TRISC0 = 1;    //telemetre 
+    _TRISC0 = 1;    //telemètre 
     _TRISC11 = 1;
     _TRISG9 = 1;
     _TRISB1 = 1;
     _TRISE15 = 1;
+    
+    
+    //***********Configuration UART******************************************************
+    
+    _U1RXR = 24; //Remappe la RPI24 sur l'entrée Rx1
+    _RP36R = 0b00001;   //Remappe la sortie TX1 vers RP36
 }
 

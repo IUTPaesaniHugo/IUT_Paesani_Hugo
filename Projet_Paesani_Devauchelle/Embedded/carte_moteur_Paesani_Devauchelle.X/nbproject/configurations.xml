@@ -13,6 +13,7 @@
       <itemPath>adc.h</itemPath>
       <itemPath>main.h</itemPath>
       <itemPath>UART.h</itemPath>
+      <itemPath>CB_TX1.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -30,6 +31,7 @@
       <itemPath>ToolBox.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>UART.c</itemPath>
+      <itemPath>CB_TX1.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -284,6 +286,8 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-557eb"/>
         <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="C:/GitHub/IUT_Paesani_Hugo/Projet_Paesani_Devauchelle/Embedded/carte_moteur_Paesani_Devauchelle.X/debug/default/carte_moteur_Paesani_Devauchelle_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.ledbrightness" value="5"/>

@@ -9,6 +9,7 @@
 #include "PWM.h"
 #include "adc.h"
 #include "main.h"
+#include "UART.h"
 
 unsigned int ADCValue0;
 unsigned int ADCValue1;
@@ -49,10 +50,16 @@ int main(void) {
     // Initialisation Convertisseur ADC
     /****************************************************************************************************/
     InitADC1();
+    
+    /****************************************************************************************************/
+    //Initialisation UART
+    /****************************************************************************************************/
+    InitUART();
     /****************************************************************************************************/
     // Boucle Principale
     /****************************************************************************************************/
     while (1) {
+
         if (ADCIsConversionFinished()) {
             ADCClearConversionFinishedFlag();
             unsigned int * result = ADCGetResult();

@@ -2,17 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/GitHub/IUT_Paesani_Hugo/Projet_Paesani_Devauchelle/Embedded/carte_moteur_Paesani_Devauchelle.X/UART.h</file>
-            <file>file:/C:/GitHub/IUT_Paesani_Hugo/Projet_Paesani_Devauchelle/Embedded/carte_moteur_Paesani_Devauchelle.X/IO.c</file>
-            <file>file:/C:/GitHub/IUT_Paesani_Hugo/Projet_Paesani_Devauchelle/Embedded/carte_moteur_Paesani_Devauchelle.X/CB_TX1.h</file>
-            <file>file:/C:/GitHub/IUT_Paesani_Hugo/Projet_Paesani_Devauchelle/Embedded/carte_moteur_Paesani_Devauchelle.X/PWM.h</file>
-            <file>file:/C:/GitHub/IUT_Paesani_Hugo/Projet_Paesani_Devauchelle/Embedded/carte_moteur_Paesani_Devauchelle.X/adc.c</file>
-            <file>file:/C:/GitHub/IUT_Paesani_Hugo/Projet_Paesani_Devauchelle/Embedded/carte_moteur_Paesani_Devauchelle.X/CB_TX1.c</file>
-            <file>file:/C:/GitHub/IUT_Paesani_Hugo/Projet_Paesani_Devauchelle/Embedded/carte_moteur_Paesani_Devauchelle.X/main.c</file>
-            <file>file:/C:/GitHub/IUT_Paesani_Hugo/Projet_Paesani_Devauchelle/Embedded/carte_moteur_Paesani_Devauchelle.X/UART.c</file>
-            <file>file:/C:/GitHub/IUT_Paesani_Hugo/Projet_Paesani_Devauchelle/Embedded/carte_moteur_Paesani_Devauchelle.X/PWM.c</file>
-            <file>file:/C:/GitHub/IUT_Paesani_Hugo/Projet_Paesani_Devauchelle/Embedded/carte_moteur_Paesani_Devauchelle.X/timer.c</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

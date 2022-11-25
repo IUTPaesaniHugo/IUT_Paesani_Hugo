@@ -10,6 +10,7 @@
 #include "adc.h"
 #include "main.h"
 #include "UART.h"
+#include "CB_TX1.h"
 
 unsigned int ADCValue0;
 unsigned int ADCValue1;
@@ -55,11 +56,12 @@ int main(void) {
     //Initialisation UART
     /****************************************************************************************************/
     InitUART();
+    
     /****************************************************************************************************/
     // Boucle Principale
     /****************************************************************************************************/
     while (1) {
-
+        SendMessage((unsigned char*)"Bonjour loopback", 16);
         if (ADCIsConversionFinished()) {
             ADCClearConversionFinishedFlag();
             unsigned int * result = ADCGetResult();

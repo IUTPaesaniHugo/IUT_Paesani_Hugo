@@ -10,6 +10,9 @@
 #include "adc.h"
 #include "main.h"
 #include "UART.h"
+#include "CB_TX1.h"
+#include "CB_RX1.h"
+#include <libpic30.h>
 
 unsigned int ADCValue0;
 unsigned int ADCValue1;
@@ -55,11 +58,19 @@ int main(void) {
     //Initialisation UART
     /****************************************************************************************************/
     InitUART();
+    
     /****************************************************************************************************/
     // Boucle Principale
     /****************************************************************************************************/
     while (1) {
-
+//        SendMessage((unsigned char*)"Bonjour loopback", 16);
+        int i;
+        for(i=0; i<CB_RX1_GetDataSize(); i++){
+            unsigned char c = CB_RX1_Get();
+            SendMessage(&c,1);
+        }
+        __delay32(10000);
+        
         if (ADCIsConversionFinished()) {
             ADCClearConversionFinishedFlag();
             unsigned int * result = ADCGetResult();

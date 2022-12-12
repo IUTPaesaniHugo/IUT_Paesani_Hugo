@@ -13,6 +13,7 @@
 #include "CB_TX1.h"
 #include "CB_RX1.h"
 #include <libpic30.h>
+#include "UART_Protocol.h"
 
 unsigned int ADCValue0;
 unsigned int ADCValue1;
@@ -20,6 +21,7 @@ unsigned int ADCValue2;
 unsigned int ADCValue3;
 unsigned int ADCValue4;
 unsigned char stateRobot;
+unsigned char payload[] = {'B', 'o', 'n', 'j', 'o', 'u', 'r'};
 
 int main(void) {
     /***************************************************************************************************/
@@ -64,12 +66,15 @@ int main(void) {
     /****************************************************************************************************/
     while (1) {
 //        SendMessage((unsigned char*)"Bonjour loopback", 16);
-        int i;
-        for(i=0; i<CB_RX1_GetDataSize(); i++){
-            unsigned char c = CB_RX1_Get();
-            SendMessage(&c,1);
-        }
-        __delay32(10000);
+//        int i;
+//        for(i=0; i<CB_RX1_GetDataSize(); i++){
+//            unsigned char c = CB_RX1_Get();
+//            SendMessage(&c,1);
+//        }
+        
+        UartEncodeAndSendMessage(0x0080, 7, payload);
+        __delay32(40000000);
+        
         
         if (ADCIsConversionFinished()) {
             ADCClearConversionFinishedFlag();

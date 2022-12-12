@@ -1,5 +1,6 @@
 #include <xc.h>
 #include "UART_Protocol.h"
+#include "CB_TX1.h"
 
 unsigned char UartCalculateChecksum(int msgFunction,
         int msgPayloadLength, unsigned char* msgPayload)//Fonction prenant entree la trame et sa longueur pour calculer le checksum
@@ -34,6 +35,8 @@ void UartEncodeAndSendMessage(int msgFunction,
             }
 
             message[pos] = UartCalculateChecksum(msgFunction, msgPayloadLength, msgPayload);
+            
+            SendMessage(message, msgPayloadLength + 6);
 
 }
 int rcvState=WAITING;
@@ -41,87 +44,86 @@ int msgDecodedFunction = 0;
 int msgDecodedPayloadLength = 0;
 unsigned char msgDecodedPayload[128];
 int msgDecodedPayloadIndex = 0;
+unsigned char receivedChecksum;
 
-void UartDecodeMessage(unsigned char c) {
-    switch (rcvState)
-            {
-                case WAITING:
-                    if (c == 0xFE)
-                    {
-                        rcvState = FUNCTIONMSB;
-                    }
-                    break;
+//void UartDecodeMessage(unsigned char c) {
+//    switch (rcvState)
+//            {
+//                case WAITING:
+//                    if (c == 0xFE)
+//                    {
+//                        rcvState = FUNCTIONMSB;
+//                    }
+//                    break;
+//
+//                case FUNCTIONMSB:
+//                    msgDecodedFunction = (c << 8);
+//                    rcvState = FUNCTIONLSB;
+//                    break;
+//
+//                case FUNCTIONLSB:
+//                    msgDecodedFunction += c;
+//                    rcvState = PAYLOADLENGTHMSB;
+//                    break;
+//
+//                case PAYLOADLENGTHMSB:
+//                    msgDecodedPayloadLength = (c << 8);
+//                    rcvState = PAYLOADLENGTHLSB;
+//                    break;
+//
+//                case PAYLOADLENGTHLSB:
+//                    msgDecodedPayloadLength += c;
+//                    if (msgDecodedPayloadLength == 0)
+//                    {
+//                        rcvState = CHECKSUM;
+//                    }
+//                    else
+//                    {
+//                        rcvState = PAYLOAD;
+//                    }
+//                    break;
+//
+//                case PAYLOAD:
+//                    if (msgDecodedPayloadIndex < msgDecodedPayloadLength)
+//                    {
+//                        msgDecodedPayload[msgDecodedPayloadIndex] = c;
+//                        msgDecodedPayloadIndex++;
+//                        if (msgDecodedPayloadIndex == msgDecodedPayloadLength)
+//                        {
+//                            rcvState = CHECKSUM;                               
+//                        }
+//                    }
+//                    break;
+//
+//                case CHECKSUM:
+//                    receivedChecksum = c;
+//                    unsigned char calculatedChecksum = UartCalculateChecksum(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
+//                    if (calculatedChecksum == receivedChecksum)
+//                    {
+//                        SendMessage((unsigned char)"OK\n",3) ;   //Success, on a un message valide
+//                        UartProcessDecodedMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
+//                    }
+//                    else
+//                    {
+//                        SendMessage((unsigned char)"Problème Checksum\n", 18);
+//                    }
+//                    rcvState = WAITING;
+//                    break;
+//
+//                default:
+//                    rcvState = WAITING;
+//                    break;
+//            }
+//
+//
+//}
 
-                case FUNCTIONMSB:
-                    msgDecodedFunction = (c << 8);
-                    rcvState = FUNCTIONLSB;
-                    break;
-
-                case FUNCTIONLSB:
-                    msgDecodedFunction += c;
-                    rcvState = PAYLOADLENGTHMSB;
-                    break;
-
-                case PAYLOADLENGTHMSB:
-                    msgDecodedPayloadLength = (c << 8);
-                    rcvState = StateReception.PayloadLengthLSB;
-                    break;
-
-                case StateReception.PayloadLengthLSB:
-                    msgDecodedPayloadLength += c;
-                    if (msgDecodedPayloadLength == 0)
-                    {
-                        rcvState = StateReception.CheckSum;
-                    }
-                    else
-                    {
-                        msgDecodedPayload = new byte[msgDecodedPayloadLength];
-                        msgDecodedPayloadIndex = 0;
-                        rcvState = StateReception.Payload;
-                    }
-                    break;
-
-                case StateReception.Payload:
-                    if (msgDecodedPayloadIndex < msgDecodedPayloadLength)
-                    {
-                        msgDecodedPayload[msgDecodedPayloadIndex] = c;
-                        msgDecodedPayloadIndex++;
-                        if (msgDecodedPayloadIndex == msgDecodedPayloadLength)
-                        {
-                            rcvState = StateReception.CheckSum;                               
-                        }
-                    }
-                    break;
-
-                case StateReception.CheckSum:
-                    byte receivedChecksum = c;
-                    byte calculatedChecksum = CalculateChecksum(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
-                    if (calculatedChecksum == receivedChecksum)
-                    {
-                        TextBoxRéception.Text += "OK\n";   //Success, on a un message valide
-                        ProcessDecodedMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
-                    }
-                    else
-                    {
-                        TextBoxRéception.Text += "Problème Checksum\n";
-                    }
-                    rcvState = StateReception.Waiting;
-                    break;
-
-                default:
-                    rcvState = StateReception.Waiting;
-                    break;
-            }
-
-
-}
-
-void UartProcessDecodedMessage(int function,
-        int payloadLength, unsigned char* payload) {
+//void UartProcessDecodedMessage(int function,
+//        int payloadLength, unsigned char* payload) {
     //Fonction appelee apres le decodage pour executer l?action
     //correspondant au message recu
 
-}
+//}
 //*************************************************************************/
 //Fonctions correspondant aux messages
 //*************************************************************************/

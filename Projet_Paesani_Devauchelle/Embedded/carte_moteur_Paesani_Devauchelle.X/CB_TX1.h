@@ -7,6 +7,7 @@ unsigned char CB_TX1_Get(void);
 void SendOne();
 unsigned char CB_TX1_IsTranmitting(void);
 int CB_TX1_RemainingSize(void);
+int CB_TX1_DataSize(void);
 
 #endif	/* CB_TX1_H */
 

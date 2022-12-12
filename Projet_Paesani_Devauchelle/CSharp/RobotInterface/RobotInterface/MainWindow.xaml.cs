@@ -112,7 +112,7 @@ namespace RobotInterface
         {
             string s = "Bonjour";
             //byte[] array = Encoding.ASCII.GetBytes(s);
-            byte[] tabled = { 0x02, 0x01};
+            byte[] tabled = { 0x01, 0x01};
             byte[] tabcons = { 0x41, 0x25};
             byte[] tabdist = { 0x3C, 0x14, 0x0D };
             byte[] tabtext = Encoding.ASCII.GetBytes(s);

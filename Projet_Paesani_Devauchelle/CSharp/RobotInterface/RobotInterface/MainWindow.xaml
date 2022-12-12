@@ -40,11 +40,12 @@
         <GroupBox Grid.Column="1" Header="Télèmetres IR" HorizontalAlignment="Right" Grid.Row="5" Width="215">
             <Label Content="IR Centre :" HorizontalAlignment="Left" Margin="6,32,0,28" Width="63"/>
         </GroupBox>
+        <Label Content="IR Gauche :" Grid.Column="1" HorizontalAlignment="Left" Margin="153,23,0,0" Grid.Row="5" VerticalAlignment="Top" Width="69"/>
+        <Label Content="IR Droit:" Grid.Column="1" HorizontalAlignment="Left" Margin="153,73,0,0" Grid.Row="5" VerticalAlignment="Top" Width="52"/>
         <GroupBox Grid.Column="3" Header="Moteurs" HorizontalAlignment="Left" Grid.Row="5" Width="236">
             <Label Content="Vitesse Gauche : " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="96"/>
         </GroupBox>
-        <Label Content="IR Gauche :" Grid.Column="1" HorizontalAlignment="Left" Margin="153,23,0,0" Grid.Row="5" VerticalAlignment="Top" Width="69"/>
-        <Label Content="IR Droit:" Grid.Column="1" HorizontalAlignment="Left" Margin="153,73,0,0" Grid.Row="5" VerticalAlignment="Top" Width="52"/>
+    
         <Label Content="" x:Name="DistanceIRGauche" Grid.Column="1" HorizontalAlignment="Left" Margin="227,23,0,0" Grid.Row="5" VerticalAlignment="Top" Width="119"/>
         <Label Content="" x:Name="DistanceIRCentre" Grid.Column="1" HorizontalAlignment="Left" Margin="227,50,0,0" Grid.Row="5" VerticalAlignment="Top" Width="119"/>
         <Label Content="" x:Name="DistanceIRDroit" Grid.Column="1" HorizontalAlignment="Left" Margin="227,73,0,0" Grid.Row="5" VerticalAlignment="Top" Width="119"/>

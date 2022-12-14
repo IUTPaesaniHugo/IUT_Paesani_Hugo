@@ -37,21 +37,21 @@
         <CheckBox Content="Led1" x:Name="CheckLed0" Grid.Column="1" HorizontalAlignment="Left" Margin="10,29,0,0" Grid.Row="5" VerticalAlignment="Top"/>
         <CheckBox Content="Led2" x:Name="CheckLed1" Grid.Column="1" HorizontalAlignment="Left" Margin="10,56,0,0" Grid.Row="5" VerticalAlignment="Top"/>
         <CheckBox Content="Led3" x:Name="CheckLed2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,85,0,0" Grid.Row="5" VerticalAlignment="Top"/>
-        <GroupBox Grid.Column="1" Header="Télèmetres IR" HorizontalAlignment="Right" Grid.Row="5" Width="215">
+        <GroupBox Grid.Column="1" Header="Télèmetres IR" HorizontalAlignment="Right" Grid.Row="5" Width="168" Margin="0,0,47,0">
             <Label Content="IR Centre :" HorizontalAlignment="Left" Margin="6,32,0,28" Width="63"/>
         </GroupBox>
         <Label Content="IR Gauche :" Grid.Column="1" HorizontalAlignment="Left" Margin="153,23,0,0" Grid.Row="5" VerticalAlignment="Top" Width="69"/>
         <Label Content="IR Droit:" Grid.Column="1" HorizontalAlignment="Left" Margin="153,73,0,0" Grid.Row="5" VerticalAlignment="Top" Width="52"/>
-        <GroupBox Grid.Column="3" Header="Moteurs" HorizontalAlignment="Left" Grid.Row="5" Width="236">
+        <GroupBox Grid.Column="1" Header="Moteurs" HorizontalAlignment="Left" Grid.Row="5" Width="206" Grid.ColumnSpan="3" Margin="314,2,0,13" Grid.RowSpan="2">
             <Label Content="Vitesse Gauche : " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="96"/>
         </GroupBox>
-    
-        <Label Content="" x:Name="DistanceIRGauche" Grid.Column="1" HorizontalAlignment="Left" Margin="227,23,0,0" Grid.Row="5" VerticalAlignment="Top" Width="119"/>
-        <Label Content="" x:Name="DistanceIRCentre" Grid.Column="1" HorizontalAlignment="Left" Margin="227,50,0,0" Grid.Row="5" VerticalAlignment="Top" Width="119"/>
-        <Label Content="" x:Name="DistanceIRDroit" Grid.Column="1" HorizontalAlignment="Left" Margin="227,73,0,0" Grid.Row="5" VerticalAlignment="Top" Width="119"/>
-        <Label Content="Vitesse Droit :" Grid.Column="3" HorizontalAlignment="Left" Margin="16,63,0,0" Grid.Row="5" VerticalAlignment="Top" Width="92"/>
-        <Label Content=""  x:Name="VitesseGauche" Grid.Column="3" HorizontalAlignment="Left" Margin="117,29,0,0" Grid.Row="5" VerticalAlignment="Top" Width="111"/>
-        <Label Content="" x:Name="VitesseDroite" Grid.Column="3" HorizontalAlignment="Left" Margin="117,63,0,0" Grid.Row="5" VerticalAlignment="Top" Width="111"/>
+
+        <Label Content="" x:Name="DistanceIRGauche" Grid.Column="1" HorizontalAlignment="Left" Margin="227,23,0,0" Grid.Row="5" VerticalAlignment="Top" Width="73"/>
+        <Label Content="" x:Name="DistanceIRCentre" Grid.Column="1" HorizontalAlignment="Left" Margin="227,50,0,0" Grid.Row="5" VerticalAlignment="Top" Width="73"/>
+        <Label Content="" x:Name="DistanceIRDroit" Grid.Column="1" HorizontalAlignment="Left" Margin="227,73,0,0" Grid.Row="5" VerticalAlignment="Top" Width="73"/>
+        <Label Content="Vitesse Droit :" Grid.Column="1" HorizontalAlignment="Left" Margin="330,58,0,0" Grid.Row="5" VerticalAlignment="Top" Width="92" Grid.ColumnSpan="3"/>
+        <Label Content=""  x:Name="VitesseGauche" Grid.Column="3" HorizontalAlignment="Left" Margin="55,29,0,0" Grid.Row="5" VerticalAlignment="Top" Width="80"/>
+        <Label Content="" x:Name="VitesseDroite" Grid.Column="3" HorizontalAlignment="Left" Margin="46,60,0,0" Grid.Row="5" VerticalAlignment="Top" Width="80"/>
 
     </Grid>
 </Window>

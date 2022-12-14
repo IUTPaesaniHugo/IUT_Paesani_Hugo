@@ -46,77 +46,72 @@ unsigned char msgDecodedPayload[128];
 int msgDecodedPayloadIndex = 0;
 unsigned char receivedChecksum;
 
-//void UartDecodeMessage(unsigned char c) {
-//    switch (rcvState)
-//            {
-//                case WAITING:
-//                    if (c == 0xFE)
-//                    {
-//                        rcvState = FUNCTIONMSB;
-//                    }
-//                    break;
-//
-//                case FUNCTIONMSB:
-//                    msgDecodedFunction = (c << 8);
-//                    rcvState = FUNCTIONLSB;
-//                    break;
-//
-//                case FUNCTIONLSB:
-//                    msgDecodedFunction += c;
-//                    rcvState = PAYLOADLENGTHMSB;
-//                    break;
-//
-//                case PAYLOADLENGTHMSB:
-//                    msgDecodedPayloadLength = (c << 8);
-//                    rcvState = PAYLOADLENGTHLSB;
-//                    break;
-//
-//                case PAYLOADLENGTHLSB:
-//                    msgDecodedPayloadLength += c;
-//                    if (msgDecodedPayloadLength == 0)
-//                    {
-//                        rcvState = CHECKSUM;
-//                    }
-//                    else
-//                    {
-//                        rcvState = PAYLOAD;
-//                    }
-//                    break;
-//
-//                case PAYLOAD:
-//                    if (msgDecodedPayloadIndex < msgDecodedPayloadLength)
-//                    {
-//                        msgDecodedPayload[msgDecodedPayloadIndex] = c;
-//                        msgDecodedPayloadIndex++;
-//                        if (msgDecodedPayloadIndex == msgDecodedPayloadLength)
-//                        {
-//                            rcvState = CHECKSUM;                               
-//                        }
-//                    }
-//                    break;
-//
-//                case CHECKSUM:
-//                    receivedChecksum = c;
-//                    unsigned char calculatedChecksum = UartCalculateChecksum(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
-//                    if (calculatedChecksum == receivedChecksum)
-//                    {
-//                        SendMessage((unsigned char)"OK\n",3) ;   //Success, on a un message valide
-//                        UartProcessDecodedMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
-//                    }
-//                    else
-//                    {
-//                        SendMessage((unsigned char)"Problème Checksum\n", 18);
-//                    }
-//                    rcvState = WAITING;
-//                    break;
-//
-//                default:
-//                    rcvState = WAITING;
-//                    break;
-//            }
-//
-//
-//}
+void UartDecodeMessage(unsigned char c) {
+    switch (rcvState)
+            {
+                case WAITING:
+                    if (c == 0xFE)
+                    {
+                        rcvState = FUNCTIONMSB;
+                    }
+                    break;
+
+                case FUNCTIONMSB:
+                    msgDecodedFunction = (c << 8);
+                    rcvState = FUNCTIONLSB;
+                    break;
+
+                case FUNCTIONLSB:
+                    msgDecodedFunction += c;
+                    rcvState = PAYLOADLENGTHMSB;
+                    break;
+
+                case PAYLOADLENGTHMSB:
+                    msgDecodedPayloadLength = (c << 8);
+                    rcvState = PAYLOADLENGTHLSB;
+                    break;
+
+                case PAYLOADLENGTHLSB:
+                    msgDecodedPayloadLength += c;
+                    if (msgDecodedPayloadLength == 0)
+                    {
+                        rcvState = CHECKSUM;
+                    }
+                    else
+                    {
+                        rcvState = PAYLOAD;
+                    }
+                    break;
+
+                case PAYLOAD:
+                    if (msgDecodedPayloadIndex < msgDecodedPayloadLength)
+                    {
+                        msgDecodedPayload[msgDecodedPayloadIndex] = c;
+                        msgDecodedPayloadIndex++;
+                        if (msgDecodedPayloadIndex == msgDecodedPayloadLength)
+                        {
+                            rcvState = CHECKSUM;                               
+                        }
+                    }
+                    break;
+
+                case CHECKSUM:
+                    receivedChecksum = c;
+                    unsigned char calculatedChecksum = UartCalculateChecksum(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
+                    if (calculatedChecksum == receivedChecksum)
+                    {
+                        //UartProcessDecodedMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
+                    }
+                    rcvState = WAITING;
+                    break;
+
+                default:
+                    rcvState = WAITING;
+                    break;
+            }
+
+
+}
 
 //void UartProcessDecodedMessage(int function,
 //        int payloadLength, unsigned char* payload) {

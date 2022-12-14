@@ -22,6 +22,8 @@ unsigned int ADCValue3;
 unsigned int ADCValue4;
 unsigned char stateRobot;
 unsigned char payload[] = {'B', 'o', 'n', 'j', 'o', 'u', 'r'};
+unsigned char DistIR[3];
+unsigned char etape[5];
 
 int main(void) {
     /***************************************************************************************************/
@@ -55,27 +57,27 @@ int main(void) {
     // Initialisation Convertisseur ADC
     /****************************************************************************************************/
     InitADC1();
-    
+
     /****************************************************************************************************/
     //Initialisation UART
     /****************************************************************************************************/
     InitUART();
-    
+
     /****************************************************************************************************/
     // Boucle Principale
     /****************************************************************************************************/
     while (1) {
-//        SendMessage((unsigned char*)"Bonjour loopback", 16);
-//        int i;
-//        for(i=0; i<CB_RX1_GetDataSize(); i++){
-//            unsigned char c = CB_RX1_Get();
-//            SendMessage(&c,1);
-//        }
-        
-        UartEncodeAndSendMessage(0x0080, 7, payload);
-        __delay32(40000000);
-        
-        
+        //        SendMessage((unsigned char*)"Bonjour loopback", 16);
+                int i;
+                for(i=0; i<CB_RX1_GetDataSize(); i++){
+                    unsigned char c = CB_RX1_Get();
+                    UartDecodeMessage(c);
+                }
+
+        //        UartEncodeAndSendMessage(0x0080, 7, payload);
+        //        __delay32(40000000);
+
+
         if (ADCIsConversionFinished()) {
             ADCClearConversionFinishedFlag();
             unsigned int * result = ADCGetResult();
@@ -96,6 +98,7 @@ int main(void) {
             robotState.distanceTelemetreGauche = 34 / volts - 5;
             volts = ((float) result [3])* 3.3 / 4096 * 3.2;
             robotState.distanceTelemetreExGauche = 34 / volts - 5;
+
 
             if (robotState.distanceTelemetreCentre < 10) {
                 robotState.distanceTelemetreCentre = 10;
@@ -130,18 +133,28 @@ int main(void) {
             } else {
                 LED_BLANCHE = 0;
             }
+
+            DistIR[0] = (unsigned char) (robotState.distanceTelemetreGauche);
+            DistIR[1] = (unsigned char) (robotState.distanceTelemetreCentre);
+            DistIR[2] = (unsigned char) (robotState.distanceTelemetreDroit);
+
+            UartEncodeAndSendMessage(0x0030, 3, DistIR);
+            __delay32(40000000);
         }
         if ((robotState.vitesseGaucheCommandeCourante == 25) && (robotState.vitesseDroiteCommandeCourante == 25)) {
             LED_BLEUE = 1;
         } else {
             LED_BLEUE = 0;
         }
+
+
     }
 }// fin main
 
 void OperatingSystemLoop(void) {
     switch (stateRobot) {
         case STATE_ATTENTE:
+
             timestamp = 0;
             PWMSetSpeedConsigne(0, MOTEUR_DROIT);
             PWMSetSpeedConsigne(0, MOTEUR_GAUCHE);
@@ -153,6 +166,7 @@ void OperatingSystemLoop(void) {
             break;
 
         case STATE_AVANCE:
+
             PWMSetSpeedConsigne(25, MOTEUR_DROIT);
             PWMSetSpeedConsigne(25, MOTEUR_GAUCHE);
             stateRobot = STATE_AVANCE_EN_COURS;
@@ -162,6 +176,7 @@ void OperatingSystemLoop(void) {
             break;
 
         case STATE_TOURNE_GAUCHE:
+
             PWMSetSpeedConsigne(13, MOTEUR_DROIT);
             PWMSetSpeedConsigne(0, MOTEUR_GAUCHE);
             stateRobot = STATE_TOURNE_GAUCHE_EN_COURS;
@@ -171,6 +186,7 @@ void OperatingSystemLoop(void) {
             break;
 
         case STATE_TOURNE_DROITE:
+
             PWMSetSpeedConsigne(0, MOTEUR_DROIT);
             PWMSetSpeedConsigne(13, MOTEUR_GAUCHE);
             stateRobot = STATE_TOURNE_DROITE_EN_COURS;
@@ -180,6 +196,7 @@ void OperatingSystemLoop(void) {
             break;
 
         case STATE_TOURNE_SUR_PLACE_GAUCHE:
+
             PWMSetSpeedConsigne(15, MOTEUR_DROIT);
             PWMSetSpeedConsigne(-15, MOTEUR_GAUCHE);
             stateRobot = STATE_TOURNE_SUR_PLACE_GAUCHE_EN_COURS;
@@ -189,6 +206,7 @@ void OperatingSystemLoop(void) {
             break;
 
         case STATE_TOURNE_SUR_PLACE_DROITE:
+
             PWMSetSpeedConsigne(-15, MOTEUR_DROIT);
             PWMSetSpeedConsigne(15, MOTEUR_GAUCHE);
             stateRobot = STATE_TOURNE_SUR_PLACE_DROITE_EN_COURS;
@@ -268,13 +286,18 @@ void SetNextRobotStateInAutomaticMode() {
     else if ((positionObstacle == OBSTACLE_EN_FACE) || (positionObstacle == OBSTACLE_EN_FACEVP)) {
         if (robotState.distanceTelemetreExDroit >= robotState.distanceTelemetreExGauche) {
             nextStateRobot = STATE_TOURNE_SUR_PLACE_DROITE;
-        }
-        else{
+        } else {
             nextStateRobot = STATE_TOURNE_SUR_PLACE_GAUCHE;
         }
     }
     //Si l'on n?est pas dans la transition de l?étape en cours
     if (nextStateRobot != stateRobot - 1) {
         stateRobot = nextStateRobot;
+        etape[0] = (unsigned char) stateRobot;
+        etape[1] = (unsigned char) (timestamp >> 24);
+        etape[2] = (unsigned char) (timestamp >> 16);
+        etape[3] = (unsigned char) (timestamp >> 8);
+        etape[4] = (unsigned char) (timestamp >> 0);
+        UartEncodeAndSendMessage(0x0050, 5, etape);
     }
 }

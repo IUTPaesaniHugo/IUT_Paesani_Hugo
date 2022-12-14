@@ -23,7 +23,7 @@ namespace RobotInterface
         public MainWindow()
         {
             InitializeComponent();
-            serialPort1 = new ReliableSerialPort("COM3", 115200, Parity.None, 8,
+            serialPort1 = new ReliableSerialPort("COM6", 115200, Parity.None, 8,    //COM3 sur le poste principal
                 StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
@@ -41,7 +41,7 @@ namespace RobotInterface
             while (robot.byteListReceived.Count != 0)
             {
                 var c = robot.byteListReceived.Dequeue();
-                TextBoxRéception.Text += "0x" + c.ToString("X2") + " ";
+                //TextBoxRéception.Text += "0x" + c.ToString("X2") + " ";
                 DecodeMessage(c);
             }
             if (robot.receivedText != "")
@@ -235,7 +235,7 @@ namespace RobotInterface
                     byte calculatedChecksum = CalculateChecksum(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
                     if (calculatedChecksum == receivedChecksum)
                     {
-                        TextBoxRéception.Text += "OK\n";   //Success, on a un message valide
+                       // TextBoxRéception.Text += "OK\n";   //Success, on a un message valide
                         ProcessDecodedMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
                     }
                     else
@@ -256,8 +256,30 @@ namespace RobotInterface
             Texte=0x0080,
             Led=0x0020,
             DistanceIR=0x0030,
-            ConsigneVitesse=0x0040
+            ConsigneVitesse=0x0040,
+            RobotState=0x0050
         }
+
+        public enum StateRobot
+        {
+            STATE_ATTENTE = 0,
+            STATE_ATTENTE_EN_COURS = 1,
+            STATE_AVANCE = 2,
+            STATE_AVANCE_EN_COURS = 3,
+            STATE_TOURNE_GAUCHE = 4,
+            STATE_TOURNE_GAUCHE_EN_COURS = 5,
+            STATE_TOURNE_DROITE = 6,
+            STATE_TOURNE_DROITE_EN_COURS = 7,
+            STATE_TOURNE_SUR_PLACE_GAUCHE = 8,
+            STATE_TOURNE_SUR_PLACE_GAUCHE_EN_COURS = 9,
+            STATE_TOURNE_SUR_PLACE_DROITE = 10,
+            STATE_TOURNE_SUR_PLACE_DROITE_EN_COURS = 11,
+            STATE_ARRET = 12,
+            STATE_ARRET_EN_COURS = 13,
+            STATE_RECULE = 14,
+            STATE_RECULE_EN_COURS = 15
+        }
+
 
         void ProcessDecodedMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
@@ -324,6 +346,14 @@ namespace RobotInterface
 
                     VitesseGauche.Content = robot.consigneGauche.ToString() + " %";
                     VitesseDroite.Content = robot.consigneDroite.ToString() + " %";
+                    break;
+
+                case (int)MsgFunction.RobotState:
+                    int instant = (((int)msgPayload[1]) << 24) + (((int)msgPayload[2]) << 16)
+                    + (((int)msgPayload[3]) << 8) + ((int)msgPayload[4]);
+                    TextBoxRéception.Text += "Robot␣State␣:␣" +
+                    ((StateRobot)(msgPayload[0])).ToString() +
+                    "␣-␣" + instant.ToString() + "␣ms\n";
                     break;
             }
         }

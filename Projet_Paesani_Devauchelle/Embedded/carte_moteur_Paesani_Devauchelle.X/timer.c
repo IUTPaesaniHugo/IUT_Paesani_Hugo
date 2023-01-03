@@ -4,7 +4,7 @@
 #include "PWM.h"
 #include "adc.h"
 #include "main.h"
-
+#include "UART_Protocol.h"
 uint16_t tour = 0;
 unsigned long timestamp=0;
 //Initialisation d?un timer 32 bits
@@ -100,7 +100,9 @@ void InitTimer4(void) { //Fréquence de 150Hz
 void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
     IFS1bits.T4IF = 0;
     timestamp = timestamp + 1;
+    if(autoControlActivated==1){
     OperatingSystemLoop();
+    }
 
 }
 

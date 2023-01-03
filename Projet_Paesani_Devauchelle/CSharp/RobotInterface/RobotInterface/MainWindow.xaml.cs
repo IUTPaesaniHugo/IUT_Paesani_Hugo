@@ -23,7 +23,7 @@ namespace RobotInterface
         public MainWindow()
         {
             InitializeComponent();
-            serialPort1 = new ReliableSerialPort("COM3", 115200, Parity.None, 8,
+            serialPort1 = new ReliableSerialPort("COM10", 115200, Parity.None, 8,
                 StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();

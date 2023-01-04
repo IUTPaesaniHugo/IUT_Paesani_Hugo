@@ -42,8 +42,8 @@
         </GroupBox>
         <Label Content="IR Gauche :" Grid.Column="1" HorizontalAlignment="Left" Margin="153,23,0,0" Grid.Row="5" VerticalAlignment="Top" Width="69"/>
         <Label Content="IR Droit:" Grid.Column="1" HorizontalAlignment="Left" Margin="153,73,0,0" Grid.Row="5" VerticalAlignment="Top" Width="52"/>
-        <GroupBox Grid.Column="1" Header="Moteurs" HorizontalAlignment="Left" Grid.Row="5" Width="206" Grid.ColumnSpan="3" Margin="314,2,0,13" Grid.RowSpan="2">
-            <Label Content="Vitesse Gauche : " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="96"/>
+        <GroupBox Grid.Column="1" Header="Moteurs" HorizontalAlignment="Left" Grid.Row="5" Width="197" Grid.ColumnSpan="3" Margin="314,2,0,13" Grid.RowSpan="2">
+            <Label Content="Vitesse Gauche : " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="97"/>
         </GroupBox>
 
         <Label Content="" x:Name="DistanceIRGauche" Grid.Column="1" HorizontalAlignment="Left" Margin="227,23,0,0" Grid.Row="5" VerticalAlignment="Top" Width="73"/>
@@ -52,6 +52,7 @@
         <Label Content="Vitesse Droit :" Grid.Column="1" HorizontalAlignment="Left" Margin="330,58,0,0" Grid.Row="5" VerticalAlignment="Top" Width="92" Grid.ColumnSpan="3"/>
         <Label Content=""  x:Name="VitesseGauche" Grid.Column="3" HorizontalAlignment="Left" Margin="55,29,0,0" Grid.Row="5" VerticalAlignment="Top" Width="80"/>
         <Label Content="" x:Name="VitesseDroite" Grid.Column="3" HorizontalAlignment="Left" Margin="46,60,0,0" Grid.Row="5" VerticalAlignment="Top" Width="80"/>
+        <CheckBox Content="Mode Manuel" x:Name="ModeManu" Grid.Column="1" HorizontalAlignment="Left" Margin="255,10,0,0" Grid.Row="3" VerticalAlignment="Top" Checked="ModeManu_Checked" Unchecked="ModeManu_Unchecked"/>
 
     </Grid>
 </Window>

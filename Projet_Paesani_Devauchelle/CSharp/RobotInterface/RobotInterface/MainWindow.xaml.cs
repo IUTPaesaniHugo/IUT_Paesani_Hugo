@@ -7,6 +7,9 @@ using System.Text;
 using System.Windows.Threading;
 using System;
 using System.Collections.Generic;
+using MouseKeyboardActivityMonitor.WinApi;
+using MouseKeyboardActivityMonitor;
+using System.Windows.Forms;
 
 namespace RobotInterface
 {
@@ -19,6 +22,7 @@ namespace RobotInterface
         ReliableSerialPort serialPort1;
         DispatcherTimer timerAffichage;
         Robot robot = new Robot();
+        private readonly KeyboardHookListener m_KeyboardHookManager;
 
         public MainWindow()
         {
@@ -33,7 +37,42 @@ namespace RobotInterface
             timerAffichage.Tick += TimerAffichage_Tick;
             timerAffichage.Start();
 
+            m_KeyboardHookManager = new KeyboardHookListener(new GlobalHooker());
+            m_KeyboardHookManager.Enabled = true;
+            m_KeyboardHookManager.KeyDown += M_KeyboardHookManager_KeyDown;
+
         }
+
+        private void M_KeyboardHookManager_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (robot.autoControlActivated == false)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Left:
+                        UartEncodeAndSendMessage(0x0051, 1, new byte[]
+                        {(byte)StateRobot.STATE_TOURNE_SUR_PLACE_GAUCHE });
+                        break;
+                    case Keys.Right:
+                        UartEncodeAndSendMessage(0x0051, 1, new byte[] {
+                        (byte)StateRobot.STATE_TOURNE_SUR_PLACE_DROITE });
+                        break;
+                    case Keys.Up:
+                        UartEncodeAndSendMessage(0x0051, 1, new byte[]
+                        { (byte)StateRobot.STATE_AVANCE });
+                        break;
+                    case Keys.PageDown:
+                        UartEncodeAndSendMessage(0x0051, 1, new byte[]
+                        { (byte)StateRobot.STATE_ARRET });
+                        break;
+                    case Keys.Down:
+                        UartEncodeAndSendMessage(0x0051, 1, new byte[]
+                        { (byte)StateRobot.STATE_RECULE });
+                        break;
+                }
+            }
+        }
+    
 
         private void TimerAffichage_Tick(object sender, EventArgs e)
         {
@@ -41,7 +80,7 @@ namespace RobotInterface
             while (robot.byteListReceived.Count != 0)
             {
                 var c = robot.byteListReceived.Dequeue();
-                TextBoxRéception.Text += "0x" + c.ToString("X2") + " ";
+                //TextBoxRéception.Text += "0x" + c.ToString("X2") + " ";
                 DecodeMessage(c);
             }
             if (robot.receivedText != "")
@@ -235,7 +274,7 @@ namespace RobotInterface
                     byte calculatedChecksum = CalculateChecksum(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
                     if (calculatedChecksum == receivedChecksum)
                     {
-                        TextBoxRéception.Text += "OK\n";   //Success, on a un message valide
+                       // TextBoxRéception.Text += "OK\n";   //Success, on a un message valide
                         ProcessDecodedMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
                     }
                     else
@@ -256,8 +295,32 @@ namespace RobotInterface
             Texte=0x0080,
             Led=0x0020,
             DistanceIR=0x0030,
-            ConsigneVitesse=0x0040
+            ConsigneVitesse=0x0040,
+            RobotState=0x0050,
+            SetRobotState=0x0051,
+            SetRobotManualControl=0x0052
         }
+
+        public enum StateRobot
+        {
+            STATE_ATTENTE = 0,
+            STATE_ATTENTE_EN_COURS = 1,
+            STATE_AVANCE = 2,
+            STATE_AVANCE_EN_COURS = 3,
+            STATE_TOURNE_GAUCHE = 4,
+            STATE_TOURNE_GAUCHE_EN_COURS = 5,
+            STATE_TOURNE_DROITE = 6,
+            STATE_TOURNE_DROITE_EN_COURS = 7,
+            STATE_TOURNE_SUR_PLACE_GAUCHE = 8,
+            STATE_TOURNE_SUR_PLACE_GAUCHE_EN_COURS = 9,
+            STATE_TOURNE_SUR_PLACE_DROITE = 10,
+            STATE_TOURNE_SUR_PLACE_DROITE_EN_COURS = 11,
+            STATE_ARRET = 12,
+            STATE_ARRET_EN_COURS = 13,
+            STATE_RECULE = 14,
+            STATE_RECULE_EN_COURS = 15
+        }
+
 
         void ProcessDecodedMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
@@ -325,7 +388,53 @@ namespace RobotInterface
                     VitesseGauche.Content = robot.consigneGauche.ToString() + " %";
                     VitesseDroite.Content = robot.consigneDroite.ToString() + " %";
                     break;
+
+                case (int)MsgFunction.RobotState:
+                    int instant = (((int)msgPayload[1]) << 24) + (((int)msgPayload[2]) << 16)
+                    + (((int)msgPayload[3]) << 8) + ((int)msgPayload[4]);
+                    TextBoxRéception.Text += "Robot␣State : " +
+                    ((StateRobot)(msgPayload[0])).ToString() +
+                    " - " + instant.ToString() + " ms\n";
+                    break;
+
             }
+        }
+
+        void SetRobotAutoControlState(byte state)
+        {
+            byte[] etat = {state};
+            if (state == 1)
+            {
+                robot.autoControlActivated = true;
+            }
+            else
+            {
+                robot.autoControlActivated = false;
+            }
+            
+            UartEncodeAndSendMessage(0x0052, 1, etat);
+        }
+
+        void SetRobotState(byte state)
+        {
+            byte[] etat = {state};
+            UartEncodeAndSendMessage(0x0051, 1, etat);
+        }
+
+        byte state = 1;
+
+        private void ModeManu_Checked(object sender, RoutedEventArgs e)
+        {
+            state=0;
+            SetRobotAutoControlState(state);
+            
+        }
+
+        private void ModeManu_Unchecked(object sender, RoutedEventArgs e)
+        {
+            state = 1;
+            SetRobotAutoControlState(state);
         }
     }
 }
+

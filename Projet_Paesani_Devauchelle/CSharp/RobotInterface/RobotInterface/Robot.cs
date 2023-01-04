@@ -18,7 +18,7 @@ namespace RobotInterface
         public int consigneGauche;
         public int consigneDroite;
         public Queue<byte> byteListReceived = new Queue<byte>();
-
+        public bool autoControlActivated = true;
         public Robot()
         {
         }

@@ -100,10 +100,7 @@ void InitTimer4(void) { //Fréquence de 150Hz
 void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
     IFS1bits.T4IF = 0;
     timestamp = timestamp + 1;
-    if(autoControlActivated==1){
     OperatingSystemLoop();
-    }
-
 }
 
 

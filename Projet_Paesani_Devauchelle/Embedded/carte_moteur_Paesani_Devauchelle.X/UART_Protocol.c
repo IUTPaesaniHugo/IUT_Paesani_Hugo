@@ -1,6 +1,9 @@
 #include <xc.h>
 #include "UART_Protocol.h"
 #include "CB_TX1.h"
+#include "main.h"
+
+unsigned char autoControlActivated = 1;
 
 unsigned char UartCalculateChecksum(int msgFunction,
         int msgPayloadLength, unsigned char* msgPayload)//Fonction prenant entree la trame et sa longueur pour calculer le checksum
@@ -32,7 +35,6 @@ void UartEncodeAndSendMessage(int msgFunction,
     for (i = 0; i < msgPayloadLength; i++) {
         message[pos++] = msgPayload[i];
     }
-
     message[pos] = UartCalculateChecksum(msgFunction, msgPayloadLength, msgPayload);
     SendMessage(message, msgPayloadLength + 6);
 }
@@ -127,9 +129,13 @@ void UartProcessDecodedMessage(int function,
 //Fonctions correspondant aux messages
 //*************************************************************************/
 
-
-void SetRobotAutoControlState(unsigned char payload){
-    if(payload!=autoControlActivated){
-        autoControlActivated=payload;
+void SetRobotAutoControlState(unsigned char state){
+    if((state!=autoControlActivated) && ((state==0)||(state==1))){
+        autoControlActivated=state;
+        stateRobot=STATE_ARRET;
     }
+}
+
+void SetRobotState(unsigned char state){
+        stateRobot=state;
 }

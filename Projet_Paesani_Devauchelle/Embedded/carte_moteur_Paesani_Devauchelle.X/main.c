@@ -21,6 +21,10 @@ unsigned int ADCValue2;
 unsigned int ADCValue3;
 unsigned int ADCValue4;
 unsigned char stateRobot;
+unsigned char payload[] = {'B', 'o', 'n', 'j', 'o', 'u', 'r'};
+unsigned char distIR[3];
+unsigned char etape[5];
+unsigned long temps;
 
 int main(void) {
     /***************************************************************************************************/
@@ -69,7 +73,10 @@ int main(void) {
         for(i=0; i<CB_RX1_GetDataSize(); i++){
             unsigned char c = CB_RX1_Get();
             UartDecodeMessage(c);
+            
         }
+//        UartEncodeAndSendMessage(0x0080, 7, payload);
+//        __delay32(40000000);
         
         if (ADCIsConversionFinished()) {
             ADCClearConversionFinishedFlag();
@@ -87,8 +94,10 @@ int main(void) {
             robotState.distanceTelemetreDroit = 34 / volts - 5;
             volts = ((float) result [2])* 3.3 / 4096 * 3.2;
             robotState.distanceTelemetreCentre = 34 / volts - 5;
+
             volts = ((float) result [4])* 3.3 / 4096 * 3.2;
             robotState.distanceTelemetreGauche = 34 / volts - 5;
+            
             volts = ((float) result [3])* 3.3 / 4096 * 3.2;
             robotState.distanceTelemetreExGauche = 34 / volts - 5;
 
@@ -107,7 +116,14 @@ int main(void) {
             if (robotState.distanceTelemetreExDroit < 10) {
                 robotState.distanceTelemetreExDroit = 10;
             }
-
+            
+//            distIR[0] = robotState.distanceTelemetreGauche;
+//            distIR[1] = robotState.distanceTelemetreCentre;
+//            distIR[2] = robotState.distanceTelemetreDroit;
+//             __delay32(40000000) ;
+//             
+//          UartEncodeAndSendMessage(0x0030, 3, distIR);
+            
             if (robotState.distanceTelemetreDroit < 30) {
                 LED_ORANGE = 1;
             } else {
@@ -131,6 +147,7 @@ int main(void) {
         } else {
             LED_BLEUE = 0;
         }
+        
     }
 }// fin main
 
@@ -152,8 +169,11 @@ void OperatingSystemLoop(void) {
             PWMSetSpeedConsigne(25, MOTEUR_GAUCHE);
             stateRobot = STATE_AVANCE_EN_COURS;
             break;
+            
         case STATE_AVANCE_EN_COURS:
+            if(autoControlActivated==1){
             SetNextRobotStateInAutomaticMode();
+            }
             break;
 
         case STATE_TOURNE_GAUCHE:
@@ -162,7 +182,9 @@ void OperatingSystemLoop(void) {
             stateRobot = STATE_TOURNE_GAUCHE_EN_COURS;
             break;
         case STATE_TOURNE_GAUCHE_EN_COURS:
+            if(autoControlActivated==1){
             SetNextRobotStateInAutomaticMode();
+            }
             break;
 
         case STATE_TOURNE_DROITE:
@@ -171,7 +193,9 @@ void OperatingSystemLoop(void) {
             stateRobot = STATE_TOURNE_DROITE_EN_COURS;
             break;
         case STATE_TOURNE_DROITE_EN_COURS:
+            if(autoControlActivated==1){
             SetNextRobotStateInAutomaticMode();
+            }
             break;
 
         case STATE_TOURNE_SUR_PLACE_GAUCHE:
@@ -180,7 +204,9 @@ void OperatingSystemLoop(void) {
             stateRobot = STATE_TOURNE_SUR_PLACE_GAUCHE_EN_COURS;
             break;
         case STATE_TOURNE_SUR_PLACE_GAUCHE_EN_COURS:
+            if(autoControlActivated==1){
             SetNextRobotStateInAutomaticMode();
+            }
             break;
 
         case STATE_TOURNE_SUR_PLACE_DROITE:
@@ -189,9 +215,36 @@ void OperatingSystemLoop(void) {
             stateRobot = STATE_TOURNE_SUR_PLACE_DROITE_EN_COURS;
             break;
         case STATE_TOURNE_SUR_PLACE_DROITE_EN_COURS:
+            if(autoControlActivated==1){
             SetNextRobotStateInAutomaticMode();
+            }
             break;
-
+        
+        case STATE_RECULE:
+            PWMSetSpeedConsigne(-15, MOTEUR_DROIT);
+            PWMSetSpeedConsigne(-15, MOTEUR_GAUCHE);
+            stateRobot = STATE_RECULE_EN_COURS;
+            break;
+            
+        case STATE_RECULE_EN_COURS:
+            if(autoControlActivated==1){
+            SetNextRobotStateInAutomaticMode();
+            }
+            break;    
+            
+        case STATE_ARRET:
+            PWMSetSpeedConsigne(0, MOTEUR_DROIT);
+            PWMSetSpeedConsigne(0, MOTEUR_GAUCHE);
+            stateRobot = STATE_RECULE_EN_COURS;
+            break;
+            
+         case STATE_ARRET_EN_COURS:
+            if(autoControlActivated==1){
+            SetNextRobotStateInAutomaticMode();
+            }
+            break;
+            
+            
         default:
             stateRobot = STATE_ATTENTE;
             break;
@@ -269,7 +322,14 @@ void SetNextRobotStateInAutomaticMode() {
         }
     }
     //Si l'on n?est pas dans la transition de l?étape en cours
-    if (nextStateRobot != stateRobot - 1) {
+    if (nextStateRobot != stateRobot - 1) {      
         stateRobot = nextStateRobot;
+        temps = timestamp;
+        etape[0]=stateRobot;
+        etape[1]=temps>>24;
+        etape[2]=temps>>16;
+        etape[3]=temps>>8;
+        etape[4]=temps;
+        //UartEncodeAndSendMessage(0x0050, 5, etape);
     }
 }

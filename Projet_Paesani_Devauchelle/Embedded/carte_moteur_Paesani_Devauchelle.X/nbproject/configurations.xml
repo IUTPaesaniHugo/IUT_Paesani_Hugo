@@ -290,8 +290,6 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-557eb"/>
         <property key="poweroptions.powerenable" value="false"/>
-        <property key="programmerToGoFilePath"
-                  value="C:/GitHub/IUT_Paesani_Hugo/Projet_Paesani_Devauchelle/Embedded/carte_moteur_Paesani_Devauchelle.X/debug/default/carte_moteur_Paesani_Devauchelle_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.ledbrightness" value="5"/>

@@ -318,7 +318,11 @@ namespace RobotInterface
             STATE_ARRET = 12,
             STATE_ARRET_EN_COURS = 13,
             STATE_RECULE = 14,
-            STATE_RECULE_EN_COURS = 15
+            STATE_RECULE_EN_COURS = 15,
+            STATE_TOURNE_GAUCHE_VNR = 16,
+            STATE_TOURNE_GAUCHE_EN_COURS_VNR = 17,
+            STATE_TOURNE_DROITE_VNR = 18,
+            STATE_TOURNE_DROITE_EN_COURS_VNR = 19
         }
 
 

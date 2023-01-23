@@ -14,6 +14,17 @@ float distanceTelemetreCentre;
 float distanceTelemetreGauche;
 float distanceTelemetreExDroit;
 float distanceTelemetreExGauche;
+
+double vitesseDroitFromOdometry;
+double vitesseGaucheFromOdometry;
+double vitesseLineaireFromOdometry;
+double vitesseAngulaireFromOdometry;
+double xPosFromOdometry;
+double yPosFromOdometry;
+double xPosFromOdometry_1;
+double yPosFromOdometry_1;
+double angleRadianFromOdometry;
+double angleRadianFromOdometry_1;
 }
 ;}
 ;} ROBOT_STATE_BITS;

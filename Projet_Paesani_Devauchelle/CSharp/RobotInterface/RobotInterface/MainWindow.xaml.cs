@@ -298,7 +298,8 @@ namespace RobotInterface
             ConsigneVitesse=0x0040,
             RobotState=0x0050,
             SetRobotState=0x0051,
-            SetRobotManualControl=0x0052
+            SetRobotManualControl=0x0052,
+            PositionData=0x0061
         }
 
         public enum StateRobot

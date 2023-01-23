@@ -1,11 +1,3 @@
-/*
-
- * File:   IO.c
-
- */
-
-
-
 #include <xc.h>
 
 #include "IO.h"
@@ -69,5 +61,11 @@ void InitIO()
     
     _U1RXR = 24; //Remappe la RPI24 sur l'entrée Rx1
     _RP36R = 0b00001;   //Remappe la sortie TX1 vers RP36
+    
+    //******************** QEI *****************
+    _QEA2R = 97; //assign QEI A to pin RP97
+    _QEB2R = 96; //assign QEI B to pin RP96
+    _QEA1R = 70; //assign QEI A to pin RP70
+    _QEB1R = 69; //assign QEI B to pin RP69
 }
 

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RobotInterface"
+        xmlns:oscillo="clr-namespace:WpfOscilloscopeControl;assembly=WpfOscilloscopeControl"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
@@ -24,43 +25,49 @@
             <ColumnDefinition Width="30"/>
         </Grid.ColumnDefinitions>
         <GroupBox Header="Réception" Margin="0" Background="#FFA8ABF1" BorderBrush="Black" Grid.Column="3" Grid.Row="1">
-            <TextBox x:Name="TextBoxRéception" TextWrapping="Wrap" Margin="0" Background="#FF97ABF0" BorderBrush="{x:Null}" TextChanged="TextBoxRéception_TextChanged" IsReadOnly="True">
+            <TextBox x:Name="TextBoxRéception" TextWrapping="Wrap" Margin="0,0,0,-3" Background="#FF97ABF0" BorderBrush="{x:Null}" TextChanged="TextBoxRéception_TextChanged" IsReadOnly="True">
             </TextBox>
         </GroupBox>
-        <GroupBox Header="Emission" Margin="0" BorderBrush="Black" Grid.Column="1" Grid.Row="1" Background="#FFA8CCF0">
-            <TextBox x:Name="TextBoxEmission" TextWrapping="Wrap" Margin="0" Background="#FF8CB0E4" BorderBrush="Black" AcceptsReturn="True" KeyUp="TextBoxEmission_KeyUp"/>
+        <GroupBox Header="Emission" Margin="0,0,0,82" BorderBrush="Black" Grid.Column="1" Grid.Row="1" Background="#FFA8CCF0">
+            <TextBox x:Name="TextBoxEmission" TextWrapping="Wrap" Background="#FF8CB0E4" BorderBrush="Black" AcceptsReturn="True" KeyUp="TextBoxEmission_KeyUp" Height="114" VerticalAlignment="Top"/>
         </GroupBox>
-        <Button x:Name="buttonEnvoyer" Content="Envoyer" Grid.Column="1" Margin="0,0,251,0" Grid.Row="3" Width="100" HorizontalAlignment="Center" Click="buttonEnvoyer_Click" Background="#FFD9EBFD"/>
+        <Button x:Name="buttonEnvoyer" Content="Envoyer" Grid.Column="1" Margin="10,142,246,47" Grid.Row="1" Width="100" HorizontalAlignment="Center" Click="buttonEnvoyer_Click" Background="#FFD9EBFD"/>
         <Button x:Name="buttonClear" Content="Clear" Grid.Column="3" Margin="0" Grid.Row="3" Width="100" HorizontalAlignment="Center" Click="buttonClear_Click" Background="#FFD9EBFD"/>
-        <Button x:Name="buttonTest" Content="Test" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,140,0" Grid.Row="3" Width="75" Click="buttonTest_Click" Background="#FFD9EBFD"/>
-        <GroupBox Grid.Column="1" Header="Leds" HorizontalAlignment="Left" Grid.Row="5" Width="100"/>
-        <CheckBox Content="Led1" x:Name="CheckLed0" Grid.Column="1" HorizontalAlignment="Left" Margin="10,29,0,0" Grid.Row="5" VerticalAlignment="Top"/>
-        <CheckBox Content="Led2" x:Name="CheckLed1" Grid.Column="1" HorizontalAlignment="Left" Margin="10,56,0,0" Grid.Row="5" VerticalAlignment="Top"/>
-        <CheckBox Content="Led3" x:Name="CheckLed2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,85,0,0" Grid.Row="5" VerticalAlignment="Top"/>
-        <GroupBox Grid.Column="1" Header="Télèmetres IR" HorizontalAlignment="Right" Grid.Row="5" Width="168" Margin="0,0,47,0">
-            <Label Content="IR Centre :" HorizontalAlignment="Left" Margin="6,32,0,28" Width="63"/>
+        <Button x:Name="buttonTest" Content="Test" Grid.Column="1" HorizontalAlignment="Right" Margin="0,142,140,47" Grid.Row="1" Width="75" Click="buttonTest_Click" Background="#FFD9EBFD"/>
+        <GroupBox Grid.Column="1" Header="Leds" HorizontalAlignment="Left" Grid.Row="1" Width="100" Margin="10,177,0,102" Grid.RowSpan="5"/>
+        <CheckBox Content="Led1" x:Name="CheckLed0" Grid.Column="1" HorizontalAlignment="Left" Margin="10,209,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.RowSpan="2"/>
+        <CheckBox Content="Led2" x:Name="CheckLed1" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="3" VerticalAlignment="Top"/>
+        <CheckBox Content="Led3" x:Name="CheckLed2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,23,0,0" Grid.Row="3" VerticalAlignment="Top" Grid.RowSpan="2"/>
+        <GroupBox Grid.Column="1" Header="Télèmetres IR" HorizontalAlignment="Right" Grid.Row="1" Width="168" Margin="0,177,47,102" Grid.RowSpan="5">
+            <Label Content="IR Centre :" HorizontalAlignment="Left" Margin="0,10,0,50" Width="63"/>
         </GroupBox>
-        <Label Content="IR Gauche :" Grid.Column="1" HorizontalAlignment="Left" Margin="153,23,0,0" Grid.Row="5" VerticalAlignment="Top" Width="69"/>
-        <Label Content="IR Droit:" Grid.Column="1" HorizontalAlignment="Left" Margin="153,73,0,0" Grid.Row="5" VerticalAlignment="Top" Width="52"/>
-        <GroupBox Grid.Column="1" Header="Moteurs" HorizontalAlignment="Left" Grid.Row="5" Width="197" Grid.ColumnSpan="3" Margin="314,2,0,13" Grid.RowSpan="2">
+        <Label Content="IR Gauche :" Grid.Column="1" HorizontalAlignment="Left" Margin="147,7,0,0" Grid.Row="2" VerticalAlignment="Top" Width="69" Grid.RowSpan="2"/>
+        <Label Content="IR Droit:" Grid.Column="1" HorizontalAlignment="Left" Margin="147,22,0,0" Grid.Row="3" VerticalAlignment="Top" Width="52" Grid.RowSpan="2"/>
+        <GroupBox Grid.Column="1" Header="Moteurs" HorizontalAlignment="Left" Grid.Row="5" Width="197" Margin="0,10,0,5" Grid.RowSpan="2">
             <Label Content="Vitesse Gauche : " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="97"/>
         </GroupBox>
 
-        <Label Content="" x:Name="DistanceIRGauche" Grid.Column="1" HorizontalAlignment="Left" Margin="227,23,0,0" Grid.Row="5" VerticalAlignment="Top" Width="73"/>
-        <Label Content="" x:Name="DistanceIRCentre" Grid.Column="1" HorizontalAlignment="Left" Margin="227,50,0,0" Grid.Row="5" VerticalAlignment="Top" Width="73"/>
-        <Label Content="" x:Name="DistanceIRDroit" Grid.Column="1" HorizontalAlignment="Left" Margin="227,73,0,0" Grid.Row="5" VerticalAlignment="Top" Width="73"/>
-        <Label Content="Vitesse Droit :" Grid.Column="1" HorizontalAlignment="Left" Margin="330,58,0,0" Grid.Row="5" VerticalAlignment="Top" Width="92" Grid.ColumnSpan="3"/>
-        <Label Content=""  x:Name="VitesseGauche" Grid.Column="3" HorizontalAlignment="Left" Margin="55,29,0,0" Grid.Row="5" VerticalAlignment="Top" Width="80"/>
-        <Label Content="" x:Name="VitesseDroite" Grid.Column="3" HorizontalAlignment="Left" Margin="46,60,0,0" Grid.Row="5" VerticalAlignment="Top" Width="80"/>
-        <CheckBox Content="Mode Manuel" x:Name="ModeManu" Grid.Column="1" HorizontalAlignment="Left" Margin="255,10,0,0" Grid.Row="3" VerticalAlignment="Top" Checked="ModeManu_Checked" Unchecked="ModeManu_Unchecked"/>
-        <GroupBox Grid.Column="3" Header="Position" HorizontalAlignment="Left" Height="107" Margin="140,2,0,0" Grid.Row="5" VerticalAlignment="Top" Width="206">
+        <Label Content="" x:Name="DistanceIRGauche" Grid.Column="1" HorizontalAlignment="Left" Margin="227,213,0,0" Grid.Row="1" VerticalAlignment="Top" Width="73" Grid.RowSpan="3"/>
+        <Label Content="" x:Name="DistanceIRCentre" Grid.Column="1" HorizontalAlignment="Left" Margin="227,9,0,0" Grid.Row="3" VerticalAlignment="Top" Width="73" Grid.RowSpan="2"/>
+        <Label Content="" x:Name="DistanceIRDroit" Grid.Column="1" HorizontalAlignment="Left" Margin="218,10,0,0" Grid.Row="4" VerticalAlignment="Top" Width="73" Grid.RowSpan="2"/>
+        <Label Content="Vitesse Droit :" Grid.Column="1" HorizontalAlignment="Left" Margin="10,68,0,0" Grid.Row="5" VerticalAlignment="Top" Width="92"/>
+        <Label Content=""  x:Name="VitesseGauche" Grid.Column="1" HorizontalAlignment="Left" Margin="117,36,0,0" Grid.Row="5" VerticalAlignment="Top" Width="80"/>
+        <Label Content="" x:Name="VitesseDroite" Grid.Column="1" HorizontalAlignment="Left" Margin="102,68,0,0" Grid.Row="5" VerticalAlignment="Top" Width="80"/>
+        <CheckBox Content="Mode Manuel" x:Name="ModeManu" Grid.Column="1" HorizontalAlignment="Left" Margin="252,150,0,0" Grid.Row="1" VerticalAlignment="Top" Checked="ModeManu_Checked" Unchecked="ModeManu_Unchecked"/>
+        <GroupBox Grid.Column="1" Header="Position" HorizontalAlignment="Left" Height="107" Margin="202,9,0,0" Grid.Row="5" VerticalAlignment="Top" Width="530" Grid.ColumnSpan="3" Grid.RowSpan="2">
             <Label Content="x :" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </GroupBox>
-        <Label Content="y :" Grid.Column="3" HorizontalAlignment="Left" Margin="145,45,0,0" Grid.Row="5" VerticalAlignment="Top"/>
-        <Label Content="" x:Name="PosX" Grid.Column="3" HorizontalAlignment="Left" Margin="172,23,0,0" Grid.Row="5" VerticalAlignment="Top" Width="91"/>
-        <Label Content="" x:Name="PosY" Grid.Column="3" HorizontalAlignment="Left" Margin="172,45,0,0" Grid.Row="5" VerticalAlignment="Top" Width="91"/>
-        <Label Content="" x:Name="Tps" Grid.Column="3" HorizontalAlignment="Left" Margin="186,76,0,0" Grid.Row="5" VerticalAlignment="Top" Width="144"/>
-        <Label Content="tps:" Grid.Column="3" HorizontalAlignment="Left" Margin="145,76,0,0" Grid.Row="5" VerticalAlignment="Top" Width="36"/>
-
+        <Label Content="y :" Grid.Column="1" HorizontalAlignment="Left" Margin="208,53,0,0" Grid.Row="5" VerticalAlignment="Top"/>
+        <Label Content="" x:Name="PosX" Grid.Column="1" HorizontalAlignment="Left" Margin="252,28,0,0" Grid.Row="5" VerticalAlignment="Top" Width="91"/>
+        <Label Content="" x:Name="PosY" Grid.Column="1" HorizontalAlignment="Left" Margin="252,53,0,0" Grid.Row="5" VerticalAlignment="Top" Width="91"/>
+        <Label Content="" x:Name="Tps" Grid.Column="1" HorizontalAlignment="Left" Margin="232,84,0,0" Grid.Row="5" VerticalAlignment="Top" Width="134" Grid.ColumnSpan="2"/>
+        <Label Content="tps:" Grid.Column="1" HorizontalAlignment="Left" Margin="204,79,0,0" Grid.Row="5" VerticalAlignment="Top" Width="36"/>
+        <Label Content="Angle:" Grid.Column="3" HorizontalAlignment="Left" Margin="10,28,0,0" Grid.Row="5" VerticalAlignment="Top"/>
+        <Label Content="Vit. Lin.:" Grid.Column="3" HorizontalAlignment="Left" Margin="10,54,0,0" Grid.Row="5" VerticalAlignment="Top" Width="59"/>
+        <Label Content="Vit. Ang.:" Grid.Column="3" HorizontalAlignment="Left" Margin="10,79,0,0" Grid.Row="5" VerticalAlignment="Top" Width="59"/>
+        <Label Content="" x:Name="Ang" Grid.Column="3" HorizontalAlignment="Left" Margin="84,28,0,0" Grid.Row="5" VerticalAlignment="Top" Width="100"/>
+        <Label Content="" x:Name="VitLin" Grid.Column="3" HorizontalAlignment="Left" Margin="84,54,0,0" Grid.Row="5" VerticalAlignment="Top" Width="100"/>
+        <Label Content="" x:Name="VitAng" Grid.Column="3" HorizontalAlignment="Left" Margin="84,80,0,0" Grid.Row="5" VerticalAlignment="Top" Width="100"/>
+        <oscillo:WpfOscilloscope x:Name="oscilloSpeed" RenderTransformOrigin="0.549,0.552" Height="58" VerticalAlignment="Bottom" Grid.Column="3" Margin="265,0,0,16" Grid.Row="5"/>
     </Grid>
 </Window>

@@ -11,6 +11,7 @@ using MouseKeyboardActivityMonitor.WinApi;
 using MouseKeyboardActivityMonitor;
 using System.Windows.Forms;
 using Utilities;
+using WpfOscilloscopeControl;
 
 namespace RobotInterface
 {
@@ -24,7 +25,6 @@ namespace RobotInterface
         DispatcherTimer timerAffichage;
         Robot robot = new Robot();
         private readonly KeyboardHookListener m_KeyboardHookManager;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -41,7 +41,6 @@ namespace RobotInterface
             m_KeyboardHookManager = new KeyboardHookListener(new GlobalHooker());
             m_KeyboardHookManager.Enabled = true;
             m_KeyboardHookManager.KeyDown += M_KeyboardHookManager_KeyDown;
-
         }
 
         private void M_KeyboardHookManager_KeyDown(object sender, KeyEventArgs e)
@@ -404,7 +403,7 @@ namespace RobotInterface
                     break;
 
                 case (int)MsgFunction.PositionData:
-                    int moment = (((int)msgPayload[0]) << 24) + (((int)msgPayload[1]) << 16)
+                    robot.moment = (((int)msgPayload[0]) << 24) + (((int)msgPayload[1]) << 16)
                     + (((int)msgPayload[2]) << 8) + ((int)msgPayload[3]);
                     var tab = BitConverter.ToSingle(msgPayload, 4);
                     robot.positionXOdo = tab;
@@ -419,7 +418,10 @@ namespace RobotInterface
                      
                     PosX.Content = robot.positionXOdo;
                     PosY.Content = robot.positionYOdo;
-                    Tps.Content = moment;
+                    Tps.Content = robot.moment;
+                    Ang.Content = robot.angleRadianOdo;
+                    VitLin.Content = robot.vitLinOdo;
+                    VitAng.Content = robot.vitAngOdo;
                     break;
 
             }

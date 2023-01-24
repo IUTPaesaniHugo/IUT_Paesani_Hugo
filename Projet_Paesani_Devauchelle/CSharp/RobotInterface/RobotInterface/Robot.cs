@@ -22,6 +22,7 @@ namespace RobotInterface
         public float angleRadianOdo;
         public float vitLinOdo;
         public float vitAngOdo;
+        public int moment;
         public Queue<byte> byteListReceived = new Queue<byte>();
         public bool autoControlActivated = true;
         public Robot()

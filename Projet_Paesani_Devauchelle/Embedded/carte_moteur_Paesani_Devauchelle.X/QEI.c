@@ -72,7 +72,7 @@ robotState.yPosFromOdometry_1 = robotState.yPosFromOdometry;
 robotState.angleRadianFromOdometry_1 = robotState.angleRadianFromOdometry;
 //Calcul des positions dans le referentiel du terrain
 robotState.xPosFromOdometry = robotState.xPosFromOdometry_1+deltadist*cos(robotState.angleRadianFromOdometry);
-robotState.yPosFromOdometry = robotState.xPosFromOdometry_1+deltadist*sin(robotState.angleRadianFromOdometry);
+robotState.yPosFromOdometry = robotState.yPosFromOdometry_1+deltadist*sin(robotState.angleRadianFromOdometry);
 robotState.angleRadianFromOdometry = robotState.angleRadianFromOdometry+deltatheta;
 if(robotState.angleRadianFromOdometry > PI)
 robotState.angleRadianFromOdometry -= 2*PI;

@@ -17,6 +17,11 @@ namespace RobotInterface
         public bool led3;
         public int consigneGauche;
         public int consigneDroite;
+        public float positionXOdo;
+        public float positionYOdo;
+        public float angleRadianOdo;
+        public float vitLinOdo;
+        public float vitAngOdo;
         public Queue<byte> byteListReceived = new Queue<byte>();
         public bool autoControlActivated = true;
         public Robot()

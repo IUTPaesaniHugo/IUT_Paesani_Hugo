@@ -67,6 +67,12 @@ int main(void) {
     InitUART();
     
     /****************************************************************************************************/
+    //Initialisation QEI
+    /****************************************************************************************************/
+    InitQEI1();
+    InitQEI2();
+    
+    /****************************************************************************************************/
     // Boucle Principale
     /****************************************************************************************************/
     while (1) {
@@ -119,10 +125,10 @@ int main(void) {
                 robotState.distanceTelemetreExDroit = 10;
             }
             
-            distIR[0] = robotState.distanceTelemetreGauche;
-            distIR[1] = robotState.distanceTelemetreCentre;
-            distIR[2] = robotState.distanceTelemetreDroit;          
-          UartEncodeAndSendMessage(0x0030, 3, distIR);
+//            distIR[0] = robotState.distanceTelemetreGauche;
+//            distIR[1] = robotState.distanceTelemetreCentre;
+//            distIR[2] = robotState.distanceTelemetreDroit;          
+//            UartEncodeAndSendMessage(0x0030, 3, distIR);
             
             if (robotState.distanceTelemetreDroit < 30) {
                 LED_ORANGE = 1;
@@ -147,15 +153,15 @@ int main(void) {
         } else {
             LED_BLEUE = 0;
         }
-        led[0]=0;
-        led[1]=LED_ORANGE;
-        UartEncodeAndSendMessage(0x0020, 2, led);
-        led[0]=1;
-        led[1]=LED_BLEUE;
-        UartEncodeAndSendMessage(0x0020, 2, led);
-        led[0]=2;
-        led[1]=LED_BLANCHE;
-        UartEncodeAndSendMessage(0x0020, 2, led);               
+//        led[0]=0;
+//        led[1]=LED_ORANGE;
+//        UartEncodeAndSendMessage(0x0020, 2, led);
+//        led[0]=1;
+//        led[1]=LED_BLEUE;
+//        UartEncodeAndSendMessage(0x0020, 2, led);
+//        led[0]=2;
+//        led[1]=LED_BLANCHE;
+//        UartEncodeAndSendMessage(0x0020, 2, led);               
     }
 }// fin main
 

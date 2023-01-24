@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using MouseKeyboardActivityMonitor.WinApi;
 using MouseKeyboardActivityMonitor;
 using System.Windows.Forms;
+using Utilities;
 
 namespace RobotInterface
 {
@@ -27,7 +28,7 @@ namespace RobotInterface
         public MainWindow()
         {
             InitializeComponent();
-            serialPort1 = new ReliableSerialPort("COM10", 115200, Parity.None, 8,
+            serialPort1 = new ReliableSerialPort("COM11", 115200, Parity.None, 8,
                 StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
@@ -400,6 +401,25 @@ namespace RobotInterface
                     TextBoxRéception.Text += "Robot␣State : " +
                     ((StateRobot)(msgPayload[0])).ToString() +
                     " - " + instant.ToString() + " ms\n";
+                    break;
+
+                case (int)MsgFunction.PositionData:
+                    int moment = (((int)msgPayload[0]) << 24) + (((int)msgPayload[1]) << 16)
+                    + (((int)msgPayload[2]) << 8) + ((int)msgPayload[3]);
+                    var tab = BitConverter.ToSingle(msgPayload, 4);
+                    robot.positionXOdo = tab;
+                    tab = BitConverter.ToSingle(msgPayload, 8);
+                    robot.positionYOdo = tab;
+                    tab = BitConverter.ToSingle(msgPayload, 12);
+                    robot.angleRadianOdo = tab;
+                    tab = BitConverter.ToSingle(msgPayload, 16);
+                    robot.vitLinOdo = tab;
+                    tab = BitConverter.ToSingle(msgPayload, 20);
+                    robot.vitAngOdo = tab;
+                     
+                    PosX.Content = robot.positionXOdo;
+                    PosY.Content = robot.positionYOdo;
+                    Tps.Content = moment;
                     break;
 
             }

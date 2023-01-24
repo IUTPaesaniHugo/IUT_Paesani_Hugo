@@ -54,8 +54,13 @@
         <Label Content="" x:Name="VitesseDroite" Grid.Column="3" HorizontalAlignment="Left" Margin="46,60,0,0" Grid.Row="5" VerticalAlignment="Top" Width="80"/>
         <CheckBox Content="Mode Manuel" x:Name="ModeManu" Grid.Column="1" HorizontalAlignment="Left" Margin="255,10,0,0" Grid.Row="3" VerticalAlignment="Top" Checked="ModeManu_Checked" Unchecked="ModeManu_Unchecked"/>
         <GroupBox Grid.Column="3" Header="Position" HorizontalAlignment="Left" Height="107" Margin="140,2,0,0" Grid.Row="5" VerticalAlignment="Top" Width="206">
-            <Label Content="x :" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top"/>
+            <Label Content="x :" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </GroupBox>
+        <Label Content="y :" Grid.Column="3" HorizontalAlignment="Left" Margin="145,45,0,0" Grid.Row="5" VerticalAlignment="Top"/>
+        <Label Content="" x:Name="PosX" Grid.Column="3" HorizontalAlignment="Left" Margin="172,23,0,0" Grid.Row="5" VerticalAlignment="Top" Width="91"/>
+        <Label Content="" x:Name="PosY" Grid.Column="3" HorizontalAlignment="Left" Margin="172,45,0,0" Grid.Row="5" VerticalAlignment="Top" Width="91"/>
+        <Label Content="" x:Name="Tps" Grid.Column="3" HorizontalAlignment="Left" Margin="186,76,0,0" Grid.Row="5" VerticalAlignment="Top" Width="144"/>
+        <Label Content="tps:" Grid.Column="3" HorizontalAlignment="Left" Margin="145,76,0,0" Grid.Row="5" VerticalAlignment="Top" Width="36"/>
 
     </Grid>
 </Window>

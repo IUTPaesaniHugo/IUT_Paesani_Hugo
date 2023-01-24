@@ -67,5 +67,6 @@ void InitIO()
     _QEB2R = 96; //assign QEI B to pin RP96
     _QEA1R = 70; //assign QEI A to pin RP70
     _QEB1R = 69; //assign QEI B to pin RP69
+    
 }
 

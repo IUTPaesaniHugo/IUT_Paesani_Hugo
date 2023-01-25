@@ -41,6 +41,9 @@ namespace RobotInterface
             m_KeyboardHookManager = new KeyboardHookListener(new GlobalHooker());
             m_KeyboardHookManager.Enabled = true;
             m_KeyboardHookManager.KeyDown += M_KeyboardHookManager_KeyDown;
+            oscilloSpeed.AddOrUpdateLine(1, 200, "Ligne1");
+            //oscilloSpeed.ChangeLineColor(1, Color.Blue);
+
         }
 
         private void M_KeyboardHookManager_KeyDown(object sender, KeyEventArgs e)
@@ -88,7 +91,7 @@ namespace RobotInterface
                 TextBoxRéception.Text += "Reçu: " + robot.receivedText + "\n";
                 robot.receivedText = "";
             }
-
+            oscilloSpeed.AddPointToLine(1, robot.moment, robot.positionXOdo);
         }
 
         public void SerialPort1_DataReceived(object sender, DataReceivedArgs e)

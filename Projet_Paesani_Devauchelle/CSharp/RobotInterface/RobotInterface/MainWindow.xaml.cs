@@ -12,7 +12,9 @@ using MouseKeyboardActivityMonitor;
 using System.Windows.Forms;
 using Utilities;
 using WpfOscilloscopeControl;
-
+using SciChart.Charting.Visuals;
+using WpfAsservissementDisplay;
+using Constants;
 namespace RobotInterface
 {
     /// <summary>
@@ -25,8 +27,12 @@ namespace RobotInterface
         DispatcherTimer timerAffichage;
         Robot robot = new Robot();
         private readonly KeyboardHookListener m_KeyboardHookManager;
+
         public MainWindow()
         {
+            // Set this code once in App.xaml.cs or application startup
+            SciChartSurface.SetRuntimeLicenseKey("q+sQ6lT1QvtQra3l2DyZQebLulL8S/PtlrQR6grzU7XoBL/cyIQZ6kU750dzh/NMSBZnBFqfykSR5VTTPYrRtblL6r9bp4zveRKlwtX0WWEFZLwAALTALlNaR4pSjpL2VzYhHQqXrAuos3Fofiid4FGCU1nG0EpLpofyWLSIE8jIEBAFBGh/DlFJwU4DovMaKgkQj9aA3K6D6gnkMX2xOYKbqDK0fNAZfWL80XtdfGY2MhJ6iQpsyeIHU8RBM9HcCMWQEmR5OPDTkaucGE5R+M55gAqndgbWwBVrJ9IYBlIWSobBwbW62yN3n9/kmlJCeYNJolIY8W6HozLpuMYH1LdTA8tI6fhdTrmvNyUC1ldv6VsH3nXmXWDbpsCzJ2I1u1wkcIq6+QF4yekajvHDXJueq2yq2bnOZYHIKEKx72wdrNW6P5vmU/W5Wgz6mJpcZPO2lB9/oU4gXi+tFcq56g4L32OT914UmEDQvvUcNSRG41/I66lOUPKhRrgAG+l3Mw==");
+
             InitializeComponent();
             serialPort1 = new ReliableSerialPort("COM11", 115200, Parity.None, 8,
                 StopBits.One);
@@ -41,11 +47,14 @@ namespace RobotInterface
             m_KeyboardHookManager = new KeyboardHookListener(new GlobalHooker());
             m_KeyboardHookManager.Enabled = true;
             m_KeyboardHookManager.KeyDown += M_KeyboardHookManager_KeyDown;
-            oscilloSpeed.AddOrUpdateLine(1, 200, "Ligne1");
-            //oscilloSpeed.ChangeLineColor(1, Color.Blue);
+            oscilloSpeed.AddOrUpdateLine(1, 200, "Pos x");
+            oscilloSpeed.ChangeLineColor(1, Color.FromRgb(0,100,255));
+            oscilloSpeed.AddOrUpdateLine(3, 200, "Pos Y");
+            oscilloSpeed.ChangeLineColor(3, Color.FromRgb(255, 0, 100));
+            oscilloPos.AddOrUpdateLine(2, 200, "Traj.");
+            oscilloPos.ChangeLineColor(2, Color.FromRgb(0, 255, 100));
 
         }
-
         private void M_KeyboardHookManager_KeyDown(object sender, KeyEventArgs e)
         {
             if (robot.autoControlActivated == false)
@@ -75,7 +84,6 @@ namespace RobotInterface
                 }
             }
         }
-    
 
         private void TimerAffichage_Tick(object sender, EventArgs e)
         {
@@ -92,6 +100,9 @@ namespace RobotInterface
                 robot.receivedText = "";
             }
             oscilloSpeed.AddPointToLine(1, robot.moment, robot.positionXOdo);
+            oscilloSpeed.AddPointToLine(3, robot.moment, robot.positionYOdo);
+            oscilloPos.AddPointToLine(2, robot.positionXOdo, robot.positionYOdo);
+            asservSpeedDisplay.UpdatePolarOdometrySpeed(robot.vitLinOdo, robot.vitAngOdo);
         }
 
         public void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
@@ -464,6 +475,11 @@ namespace RobotInterface
         {
             state = 1;
             SetRobotAutoControlState(state);
+        }
+
+        private void oscilloSpeed_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

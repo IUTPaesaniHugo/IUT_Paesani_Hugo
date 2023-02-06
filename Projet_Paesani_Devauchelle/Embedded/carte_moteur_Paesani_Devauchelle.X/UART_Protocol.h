@@ -11,6 +11,7 @@
 
 #define SET_ROBOT_STATE 0x0051
 #define SET_ROBOT_MANUAL_CONTROL 0x0052
+#define ASSERVISSEMENT 0x0063
 
 extern unsigned char autoControlActivated ;
 extern unsigned char stateRobot; 

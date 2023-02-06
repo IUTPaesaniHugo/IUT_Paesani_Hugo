@@ -14,6 +14,8 @@
 #include "CB_RX1.h"
 #include <libpic30.h>
 #include "UART_Protocol.h"
+#include "asservissement.h"
+#include "QEI.h"
 
 unsigned int ADCValue0;
 unsigned int ADCValue1;

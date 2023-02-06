@@ -479,7 +479,24 @@ namespace RobotInterface
 
         private void oscilloSpeed_Loaded(object sender, RoutedEventArgs e)
         {
+        }
 
+        bool atoggle = false;
+        bool btoggle = false;
+        private void ButtonAsserX_Click(object sender, RoutedEventArgs e)
+        {
+            
+            if (atoggle == false)
+            {
+                ButtonAsserX.Background = Brushes.Aquamarine;
+                atoggle = true;
+            }
+            else
+            {
+                ButtonAsserX.Background = Brushes.Coral;
+                atoggle = false;
+            }
+            UartEncodeAndSendMessage(0x0063, 29, tabled);
         }
     }
 }

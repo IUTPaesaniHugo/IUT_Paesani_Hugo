@@ -6,6 +6,7 @@
 #include "ToolBox.h"
 #include "timer.h"
 #include "main.h"
+#include "asservissement.h"
 
 #define PWMPER 40.0
 

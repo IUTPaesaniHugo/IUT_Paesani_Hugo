@@ -122,15 +122,14 @@ void UartProcessDecodedMessage(int function,
             SetRobotAutoControlState(payload[0]);
             break;
             
-        case ASSERVISSEMENT:
-            proportionelleMax=(double)(payload[17]<<24)+(payload[18]<<16)+(payload[19]<<8)+payload[20];
-            integralMax=(double)(payload[21]<<24)+(payload[22]<<16)+(payload[23]<<8)+payload[24];
-            deriveeMax=(double)(payload[25]<<24)+(payload[26]<<16)+(payload[27]<<8)+payload[28];
-            
+        case ASSERVISSEMENT:          
             if(payload[0]==0){
-            SetupPidAsservissement(robotState.PidX, (double)(payload[1]<<24)+(payload[2]<<16)+(payload[3]<<8)+payload[4]
-                    , (double)(payload[5]<<24)+(payload[6]<<16)+(payload[7]<<8)+payload[8]
-                    , (double)(payload[9]<<24)+(payload[10]<<16)+(payload[11]<<8)+payload[12]
+            proportionelleMax=(double)((payload[17]<<24)+(payload[18]<<16)+(payload[19]<<8)+payload[20]);
+            integralMax=(double)((payload[21]<<24)+(payload[22]<<16)+(payload[23]<<8)+payload[24]);
+            deriveeMax=(double)((payload[25]<<24)+(payload[26]<<16)+(payload[27]<<8)+payload[28]);
+            SetupPidAsservissement(robotState.PidX, (double)((payload[1]<<24)+(payload[2]<<16)+(payload[3]<<8)+payload[4])
+                    , (double)((payload[5]<<24)+(payload[6]<<16)+(payload[7]<<8)+payload[8])
+                    , (double)((payload[9]<<24)+(payload[10]<<16)+(payload[11]<<8)+payload[12])
                     , (double)(payload[13]<<24)+(payload[14]<<16)+(payload[15]<<8)+payload[16]);
             }
             else{

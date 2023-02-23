@@ -485,7 +485,71 @@ namespace RobotInterface
         bool btoggle = false;
         private void ButtonAsserX_Click(object sender, RoutedEventArgs e)
         {
-            
+            float kp = 0.75f;
+            float ki = 1.08f;
+            float kd = 0.29f;
+            float pro = 0.61f;
+            float propmax = 15.63f;
+            float intmax = 2.34f;
+            float dermax = 8.67f;
+
+            byte[] tkp = BitConverter.GetBytes(kp);
+            byte[] tki = BitConverter.GetBytes(ki);
+            byte[] tkd = BitConverter.GetBytes(kd);
+            byte[] tpro = BitConverter.GetBytes(pro);
+            byte[] tpropmax = BitConverter.GetBytes(propmax);
+            byte[] tintmax = BitConverter.GetBytes(intmax);
+            byte[] tdermax = BitConverter.GetBytes(dermax);
+
+            byte[] tabasx= new byte[29];
+            tabasx[0] = 0x00;
+            for (int i = 0; i < 28; i++)
+            {
+                if (i < 4)
+                {
+                    tabasx[i + 1] = tkp[i % 4];
+                }
+                else
+                {
+                    if (i < 8)
+                    {
+                        tabasx[i + 1] = tki[i % 4];
+                    }
+                    else
+                    {
+                        if (i < 12)
+                        {
+                            tabasx[i + 1] = tkd[i % 4];
+                        }
+                        else
+                        {
+                            if (i < 16)
+                            {
+                                tabasx[i + 1] = tpro[i % 4];
+                            }
+                            else
+                            {
+                                if (i < 20)
+                                {
+                                    tabasx[i + 1] = tpropmax[i % 4];
+                                }
+                                else
+                                {
+                                    if (i < 24)
+                                    {
+                                        tabasx[i + 1] = tintmax[i % 4];
+                                    }
+                                    else
+                                    {
+                                        tabasx[i + 1] = tdermax[i % 4];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             if (atoggle == false)
             {
                 ButtonAsserX.Background = Brushes.Aquamarine;
@@ -496,7 +560,7 @@ namespace RobotInterface
                 ButtonAsserX.Background = Brushes.Coral;
                 atoggle = false;
             }
-            UartEncodeAndSendMessage(0x0063, 29, tabled);
+            UartEncodeAndSendMessage(0x0063, 29, tabasx);
         }
     }
 }

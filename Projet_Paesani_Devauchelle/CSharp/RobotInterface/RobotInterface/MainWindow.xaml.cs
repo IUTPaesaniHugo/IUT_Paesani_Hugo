@@ -313,7 +313,8 @@ namespace RobotInterface
             RobotState=0x0050,
             SetRobotState=0x0051,
             SetRobotManualControl=0x0052,
-            PositionData=0x0061
+            PositionData=0x0061,
+            Asservissement=0x0063
         }
 
         public enum StateRobot
@@ -436,6 +437,13 @@ namespace RobotInterface
                     Ang.Content = robot.angleRadianOdo;
                     VitLin.Content = robot.vitLinOdo;
                     VitAng.Content = robot.vitAngOdo;
+                    break;
+
+                case (int)MsgFunction.Asservissement:
+                    if (msgPayload[0] == 0)
+                    {
+
+                    }
                     break;
 
             }

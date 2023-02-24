@@ -4,7 +4,8 @@
 #include "main.h"
 #include "Robot.h"
 #include "asservissement.h"
-
+#include "Utilities.h"
+#include "asservissement.h"
 unsigned char autoControlActivated = 1;
 
 unsigned char UartCalculateChecksum(int msgFunction,
@@ -48,6 +49,7 @@ unsigned char msgDecodedPayload[128];
 int msgDecodedPayloadIndex = 0;
 unsigned char receivedChecksum;
 unsigned char calculatedChecksum;
+double kp, ki, kd, pro;
 
 void UartDecodeMessage(unsigned char c) {
     switch (rcvState) {
@@ -122,24 +124,22 @@ void UartProcessDecodedMessage(int function,
             SetRobotAutoControlState(payload[0]);
             break;
             
-        case ASSERVISSEMENT:          
+         case ASSERVISSEMENT:
+            kp = getDouble(payload, 1);
+            ki= getDouble(payload, 5);
+            kd=getDouble(payload, 9);
+            pro=getDouble(payload, 13);
+            proportionelleMax=getDouble(payload, 17);
+            integralMax=getDouble(payload, 21);
+            deriveeMax=getDouble(payload,25);
+            
             if(payload[0]==0){
-            proportionelleMax=(double)((payload[17]<<24)+(payload[18]<<16)+(payload[19]<<8)+payload[20]);
-            integralMax=(double)((payload[21]<<24)+(payload[22]<<16)+(payload[23]<<8)+payload[24]);
-            deriveeMax=(double)((payload[25]<<24)+(payload[26]<<16)+(payload[27]<<8)+payload[28]);
-            SetupPidAsservissement(robotState.PidX, (double)((payload[1]<<24)+(payload[2]<<16)+(payload[3]<<8)+payload[4])
-                    , (double)((payload[5]<<24)+(payload[6]<<16)+(payload[7]<<8)+payload[8])
-                    , (double)((payload[9]<<24)+(payload[10]<<16)+(payload[11]<<8)+payload[12])
-                    , (double)(payload[13]<<24)+(payload[14]<<16)+(payload[15]<<8)+payload[16]);
+            SetupPidAsservissement(&robotState.PidX, kp, ki, kd, pro);
             }
             else{
-                SetupPidAsservissement(robotState.PidTheta, (double)(payload[1]<<24)+(payload[2]<<16)+(payload[3]<<8)+payload[4]
-                    , (double)(payload[5]<<24)+(payload[6]<<16)+(payload[7]<<8)+payload[8]
-                    , (double)(payload[9]<<24)+(payload[10]<<16)+(payload[11]<<8)+payload[12]
-                    , (double)(payload[13]<<24)+(payload[14]<<16)+(payload[15]<<8)+payload[16]);
-            }
-            
-            
+                SetupPidAsservissement(&robotState.PidTheta, kp, ki, kd, pro);
+            }    
+                       
         default:
             break;
 

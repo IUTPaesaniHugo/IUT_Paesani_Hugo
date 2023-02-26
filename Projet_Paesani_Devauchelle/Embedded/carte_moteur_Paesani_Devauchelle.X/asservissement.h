@@ -18,9 +18,9 @@ double corrI;
 double corrD;
 }PidCorrector;
 
-double proportionelleMax;
-double integralMax;
-double deriveeMax;
+extern double proportionelleMax;
+extern double integralMax;
+extern double deriveeMax;
 
 void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double pro);
 void SendPIDAsservissement(volatile PidCorrector* PidCorr);

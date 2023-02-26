@@ -2,7 +2,12 @@
 #include "IO.h"
 #include "asservissement.h"
 #include "main.h"
+#include "Utilities.h"
+#include "UART_Protocol.h"
 
+double proportionelleMax;
+double integralMax;
+double deriveeMax;
 
 void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double pro){
 PidCorr->Kp = Kp;
@@ -15,7 +20,7 @@ PidCorr->erreurDeriveeMax = deriveeMax;
 
 void SendPidAsservissement(volatile PidCorrector* PidCorr, unsigned char dou){
     double Kp, Ki, Kd, Pro, proportionelleMax, integralMax, deriveeMax;
-    unsigned char *message[29];
+    unsigned char message[29];
     Kp=PidCorr->Kp;
     Ki=PidCorr->Ki;
     Kd=PidCorr->Kd;

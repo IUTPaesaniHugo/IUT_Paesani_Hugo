@@ -440,10 +440,10 @@ namespace RobotInterface
                     break;
 
                 case (int)MsgFunction.Asservissement:
-                    if (msgPayload[0] == 0)
-                    {
-
-                    }
+                    float kp = BitConverter.ToSingle(msgPayload, 1);
+                    float ki = BitConverter.ToSingle(msgPayload, 5);
+                    asservSpeedDisplay.UpdatePolarSpeedCorrectionGains(, double KpTheta, double KiX, double KiTheta,
+            double KdX, double KdTheta);
                     break;
 
             }

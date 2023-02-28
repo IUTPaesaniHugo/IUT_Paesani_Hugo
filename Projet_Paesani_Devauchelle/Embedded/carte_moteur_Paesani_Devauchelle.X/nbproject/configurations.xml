@@ -225,6 +225,9 @@
       <ICD4Tool>
         <property key="debugoptions.useswbreakpoints" value="true"/>
       </ICD4Tool>
+      <Tool>
+        <property key="debugoptions.useswbreakpoints" value="true"/>
+      </Tool>
     </conf>
   </confs>
 </configurationDescriptor>

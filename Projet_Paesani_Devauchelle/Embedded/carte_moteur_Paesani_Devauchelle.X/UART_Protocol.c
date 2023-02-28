@@ -145,20 +145,35 @@ void UartProcessDecodedMessage(int function,
             tkd[2]=payload[11];
             tkd[3]=payload[12];
             
+            tpropmax[0]=payload[13];
+            tpropmax[1]=payload[14];
+            tpropmax[2]=payload[15];
+            tpropmax[3]=payload[16];
+            
+            tintmax[0]=payload[17];
+            tintmax[1]=payload[18];
+            tintmax[2]=payload[19];
+            tintmax[3]=payload[20];
+            
+            tdermax[0]=payload[21];
+            tdermax[1]=payload[22];
+            tdermax[2]=payload[23];
+            tdermax[3]=payload[24];
+            
             kp = getFloat(tkp, 0);
-            ki= getFloat(payload, 5);
-            kd=getDouble(payload, 9);
-            proportionelleMax=getDouble(payload, 13);
-            integralMax=getDouble(payload, 17);
-            deriveeMax=getDouble(payload,21);
+            ki= getFloat(tki, 0);
+            kd=getFloat(tkd, 0);
+            proportionelleMax=getFloat(tpropmax, 0);
+            integralMax=getFloat(tintmax, 0);
+            deriveeMax=getFloat(tdermax, 0);
             
             if(payload[0]==0){
             SetupPidAsservissement(&robotState.PidX, kp, ki, kd);
-            SendPidAsservissement(&robotState.PidX, (unsigned char)0);
+            SendPidAsservissement(&robotState.PidX);
             }
             else{
                 SetupPidAsservissement(&robotState.PidTheta, kp, ki, kd);
-                SendPidAsservissement(&robotState.PidTheta, (unsigned char)1);
+                SendPidAsservissement(&robotState.PidTheta);
             }
                        
         default:

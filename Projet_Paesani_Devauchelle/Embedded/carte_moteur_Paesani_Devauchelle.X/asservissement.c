@@ -4,6 +4,7 @@
 #include "main.h"
 #include "Utilities.h"
 #include "UART_Protocol.h"
+#include "Robot.h"
 
 double proportionelleMax;
 double integralMax;
@@ -18,7 +19,7 @@ PidCorr->Kd = Kd;
 PidCorr->erreurDeriveeMax = deriveeMax;
 }
 
-void SendPidAsservissement(volatile PidCorrector* PidCorr, unsigned char dou){
+void SendPidAsservissement(volatile PidCorrector* PidCorr){
     double Kp, Ki, Kd, proportionelleMax, integralMax, deriveeMax;
     unsigned char message[29];
     Kp=PidCorr->Kp;
@@ -27,8 +28,12 @@ void SendPidAsservissement(volatile PidCorrector* PidCorr, unsigned char dou){
     proportionelleMax=PidCorr->erreurProportionelleMax;
     integralMax=PidCorr->erreurIntegraleMax;
     deriveeMax=PidCorr->erreurDeriveeMax;
-    
-    message[0]=dou;    
+    if(PidCorr==&robotState.PidX){
+        message[0]=(unsigned char)0;
+    }
+    else{
+        message[0]=(unsigned char)1;
+    }   
     getBytesFromFloat(message, 1, Kp);
     getBytesFromFloat(message, 5, Ki);
     getBytesFromFloat(message, 9, Kd);

@@ -341,6 +341,21 @@ namespace RobotInterface
             STATE_TOURNE_DROITE_EN_COURS_VNR = 19
         }
 
+        float kpX=0;
+        float kiX = 0;
+        float kdX = 0;
+        float proX = 0;
+        float promaxX = 0;
+        float intmaxX = 0;
+        float dermaxX = 0;
+        float kpT = 0;
+        float kiT = 0;
+        float kdT = 0;
+        float proT = 0;
+        float promaxT = 0;
+        float intmaxT = 0;
+        float dermaxT = 0;
+
 
         void ProcessDecodedMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
@@ -440,10 +455,23 @@ namespace RobotInterface
                     break;
 
                 case (int)MsgFunction.Asservissement:
+                    
                     float kp = BitConverter.ToSingle(msgPayload, 1);
                     float ki = BitConverter.ToSingle(msgPayload, 5);
-                    asservSpeedDisplay.UpdatePolarSpeedCorrectionGains(, double KpTheta, double KiX, double KiTheta,
-            double KdX, double KdTheta);
+                    float kd = BitConverter.ToSingle(msgPayload, 9);
+                    if (msgPayload[0] == 0)
+                    {
+                        kpX = kp;
+                        kiX = ki;
+                        kdX = kd;
+                    }
+                    else
+                    {
+                        kpT = kp;
+                        kiT = ki;
+                        kdT = kd;
+                    }
+                    asservSpeedDisplay.UpdatePolarSpeedCorrectionGains(kpX, kpT, kiX, kiT, kdX, kdT);
                     break;
 
             }
@@ -496,7 +524,6 @@ namespace RobotInterface
             float kp = 0.75f;
             float ki = 1.08f;
             float kd = 0.29f;
-            float pro = 0.61f;
             float propmax = 15.63f;
             float intmax = 2.34f;
             float dermax = 8.67f;
@@ -504,59 +531,18 @@ namespace RobotInterface
             byte[] tkp = BitConverter.GetBytes(kp);
             byte[] tki = BitConverter.GetBytes(ki);
             byte[] tkd = BitConverter.GetBytes(kd);
-            byte[] tpro = BitConverter.GetBytes(pro);
             byte[] tpropmax = BitConverter.GetBytes(propmax);
             byte[] tintmax = BitConverter.GetBytes(intmax);
             byte[] tdermax = BitConverter.GetBytes(dermax);
 
-            byte[] tabasx= new byte[29];
-            tabasx[0] = 0x00;
-            for (int i = 0; i < 28; i++)
-            {
-                if (i < 4)
-                {
-                    tabasx[i + 1] = tkp[i % 4];
-                }
-                else
-                {
-                    if (i < 8)
-                    {
-                        tabasx[i + 1] = tki[i % 4];
-                    }
-                    else
-                    {
-                        if (i < 12)
-                        {
-                            tabasx[i + 1] = tkd[i % 4];
-                        }
-                        else
-                        {
-                            if (i < 16)
-                            {
-                                tabasx[i + 1] = tpro[i % 4];
-                            }
-                            else
-                            {
-                                if (i < 20)
-                                {
-                                    tabasx[i + 1] = tpropmax[i % 4];
-                                }
-                                else
-                                {
-                                    if (i < 24)
-                                    {
-                                        tabasx[i + 1] = tintmax[i % 4];
-                                    }
-                                    else
-                                    {
-                                        tabasx[i + 1] = tdermax[i % 4];
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            byte[] tabasx= new byte[25];
+            tabasx[0] = 0;
+            Array.Copy(tkp, 0, tabasx, 1, 4);
+            Array.Copy(tki, 0, tabasx, 5, 4);
+            Array.Copy(tkd, 0, tabasx, 9, 4);
+            Array.Copy(tpropmax, 0, tabasx, 13, 4);
+            Array.Copy(tintmax, 0, tabasx, 17, 4);
+            Array.Copy(tdermax, 0, tabasx, 21, 4);
 
             if (atoggle == false)
             {

@@ -30,8 +30,8 @@
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="0*"></ColumnDefinition>
+                <ColumnDefinition Width="0*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
 

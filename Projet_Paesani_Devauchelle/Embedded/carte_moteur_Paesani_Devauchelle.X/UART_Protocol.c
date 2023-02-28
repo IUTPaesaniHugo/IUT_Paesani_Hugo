@@ -95,7 +95,6 @@ void UartDecodeMessage(unsigned char c) {
             break;
 
         case CHECKSUM:
-
             receivedChecksum = c;
             calculatedChecksum = UartCalculateChecksum(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
             if (calculatedChecksum == receivedChecksum) {
@@ -112,6 +111,12 @@ void UartDecodeMessage(unsigned char c) {
 }
 
 int msgFunction;
+unsigned char tkp[4];
+unsigned char tki[4];
+unsigned char tkd[4];
+unsigned char tpropmax[4];
+unsigned char tintmax[4];
+unsigned char tdermax[4];
 
 void UartProcessDecodedMessage(int function,
         int payloadLength, unsigned char* payload) {
@@ -125,24 +130,39 @@ void UartProcessDecodedMessage(int function,
             break;
             
          case ASSERVISSEMENT:
-            kp = getDouble(payload, 1);
-            ki= getDouble(payload, 5);
+            tkp[0]=payload[1];
+            tkp[1]=payload[2];
+            tkp[2]=payload[3];
+            tkp[3]=payload[4];
+            
+            tki[0]=payload[5];
+            tki[1]=payload[6];
+            tki[2]=payload[7];
+            tki[3]=payload[8];
+            
+            tkd[0]=payload[9];
+            tkd[1]=payload[10];
+            tkd[2]=payload[11];
+            tkd[3]=payload[12];
+            
+            kp = getFloat(tkp, 0);
+            ki= getFloat(payload, 5);
             kd=getDouble(payload, 9);
-            pro=getDouble(payload, 13);
-            proportionelleMax=getDouble(payload, 17);
-            integralMax=getDouble(payload, 21);
-            deriveeMax=getDouble(payload,25);
+            proportionelleMax=getDouble(payload, 13);
+            integralMax=getDouble(payload, 17);
+            deriveeMax=getDouble(payload,21);
             
             if(payload[0]==0){
-            SetupPidAsservissement(&robotState.PidX, kp, ki, kd, pro);
+            SetupPidAsservissement(&robotState.PidX, kp, ki, kd);
+            SendPidAsservissement(&robotState.PidX, (unsigned char)0);
             }
             else{
-                SetupPidAsservissement(&robotState.PidTheta, kp, ki, kd, pro);
-            }    
+                SetupPidAsservissement(&robotState.PidTheta, kp, ki, kd);
+                SendPidAsservissement(&robotState.PidTheta, (unsigned char)1);
+            }
                        
         default:
             break;
-
     }
 }
 //*************************************************************************/

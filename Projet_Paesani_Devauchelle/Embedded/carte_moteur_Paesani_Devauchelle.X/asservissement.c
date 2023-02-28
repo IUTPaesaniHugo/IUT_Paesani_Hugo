@@ -9,7 +9,7 @@ double proportionelleMax;
 double integralMax;
 double deriveeMax;
 
-void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double pro){
+void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd){
 PidCorr->Kp = Kp;
 PidCorr->erreurProportionelleMax = proportionelleMax; //On limite la correction due au Kp
 PidCorr->Ki = Ki;
@@ -19,12 +19,11 @@ PidCorr->erreurDeriveeMax = deriveeMax;
 }
 
 void SendPidAsservissement(volatile PidCorrector* PidCorr, unsigned char dou){
-    double Kp, Ki, Kd, Pro, proportionelleMax, integralMax, deriveeMax;
+    double Kp, Ki, Kd, proportionelleMax, integralMax, deriveeMax;
     unsigned char message[29];
     Kp=PidCorr->Kp;
     Ki=PidCorr->Ki;
     Kd=PidCorr->Kd;
-    Pro=PidCorr->corrP;
     proportionelleMax=PidCorr->erreurProportionelleMax;
     integralMax=PidCorr->erreurIntegraleMax;
     deriveeMax=PidCorr->erreurDeriveeMax;
@@ -33,10 +32,9 @@ void SendPidAsservissement(volatile PidCorrector* PidCorr, unsigned char dou){
     getBytesFromFloat(message, 1, Kp);
     getBytesFromFloat(message, 5, Ki);
     getBytesFromFloat(message, 9, Kd);
-    getBytesFromFloat(message, 13, Pro);
-    getBytesFromFloat(message, 17, proportionelleMax);
-    getBytesFromFloat(message, 21, integralMax);
-    getBytesFromFloat(message, 25, deriveeMax);
+    getBytesFromFloat(message, 13, proportionelleMax);
+    getBytesFromFloat(message, 17, integralMax);
+    getBytesFromFloat(message, 21, deriveeMax);
     
     UartEncodeAndSendMessage(0x0063, 29, message);  
 }

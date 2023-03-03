@@ -344,14 +344,12 @@ namespace RobotInterface
         float kpX=0;
         float kiX = 0;
         float kdX = 0;
-        float proX = 0;
         float promaxX = 0;
         float intmaxX = 0;
         float dermaxX = 0;
         float kpT = 0;
         float kiT = 0;
         float kdT = 0;
-        float proT = 0;
         float promaxT = 0;
         float intmaxT = 0;
         float dermaxT = 0;
@@ -459,19 +457,31 @@ namespace RobotInterface
                     float kp = BitConverter.ToSingle(msgPayload, 1);
                     float ki = BitConverter.ToSingle(msgPayload, 5);
                     float kd = BitConverter.ToSingle(msgPayload, 9);
+                    float promax = BitConverter.ToSingle(msgPayload, 13);
+                    float intmax = BitConverter.ToSingle(msgPayload, 17);
+                    float dermax = BitConverter.ToSingle(msgPayload, 21);
+
+
                     if (msgPayload[0] == 0)
                     {
                         kpX = kp;
                         kiX = ki;
                         kdX = kd;
+                        promaxX = promax;
+                        intmaxX = intmax;
+                        dermaxX = dermax;
                     }
                     else
                     {
                         kpT = kp;
                         kiT = ki;
                         kdT = kd;
+                        promaxT = promax;
+                        intmaxT = intmax;
+                        dermaxT = dermax;
                     }
                     asservSpeedDisplay.UpdatePolarSpeedCorrectionGains(kpX, kpT, kiX, kiT, kdX, kdT);
+                    asservSpeedDisplay.UpdatePolarSpeedCorrectionLimits(promaxX, promaxT, intmaxX, intmaxT, dermaxX, dermaxT);
                     break;
 
             }
@@ -519,6 +529,7 @@ namespace RobotInterface
 
         bool atoggle = false;
         bool btoggle = false;
+
         private void ButtonAsserX_Click(object sender, RoutedEventArgs e)
         {
             float kp = 0.75f;
@@ -554,7 +565,45 @@ namespace RobotInterface
                 ButtonAsserX.Background = Brushes.Coral;
                 atoggle = false;
             }
-            UartEncodeAndSendMessage(0x0063, 29, tabasx);
+            UartEncodeAndSendMessage(0x0063, 25, tabasx);
+        }
+
+        private void ButtonAsserTheta_Click(object sender, RoutedEventArgs e)
+        {
+            float kp = 1.8f;
+            float ki = 0.28f;
+            float kd = 3.93f;
+            float propmax = 18.93f;
+            float intmax = 5.7f;
+            float dermax = 12.66f;
+
+            byte[] tkp = BitConverter.GetBytes(kp);
+            byte[] tki = BitConverter.GetBytes(ki);
+            byte[] tkd = BitConverter.GetBytes(kd);
+            byte[] tpropmax = BitConverter.GetBytes(propmax);
+            byte[] tintmax = BitConverter.GetBytes(intmax);
+            byte[] tdermax = BitConverter.GetBytes(dermax);
+
+            byte[] tabasx = new byte[25];
+            tabasx[0] = 1;
+            Array.Copy(tkp, 0, tabasx, 1, 4);
+            Array.Copy(tki, 0, tabasx, 5, 4);
+            Array.Copy(tkd, 0, tabasx, 9, 4);
+            Array.Copy(tpropmax, 0, tabasx, 13, 4);
+            Array.Copy(tintmax, 0, tabasx, 17, 4);
+            Array.Copy(tdermax, 0, tabasx, 21, 4);
+
+            if (btoggle == false)
+            {
+                ButtonAsserX.Background = Brushes.Aquamarine;
+                atoggle = true;
+            }
+            else
+            {
+                ButtonAsserX.Background = Brushes.Coral;
+                btoggle = false;
+            }
+            UartEncodeAndSendMessage(0x0063, 25, tabasx);
         }
     }
 }

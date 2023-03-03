@@ -21,7 +21,7 @@ PidCorr->erreurDeriveeMax = deriveeMax;
 
 void SendPidAsservissement(volatile PidCorrector* PidCorr){
     double Kp, Ki, Kd, proportionelleMax, integralMax, deriveeMax;
-    unsigned char message[29];
+    unsigned char message[25];
     Kp=PidCorr->Kp;
     Ki=PidCorr->Ki;
     Kd=PidCorr->Kd;
@@ -41,5 +41,5 @@ void SendPidAsservissement(volatile PidCorrector* PidCorr){
     getBytesFromFloat(message, 17, integralMax);
     getBytesFromFloat(message, 21, deriveeMax);
     
-    UartEncodeAndSendMessage(0x0063, 29, message);  
+    UartEncodeAndSendMessage(0x0063, 25, message);  
 }

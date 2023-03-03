@@ -77,6 +77,6 @@
             <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservSpeedDisplay" Grid.RowSpan="2" Grid.Column="4" Margin="0" Grid.ColumnSpan="2" Grid.Row="1"/>
         </GroupBox>
         <Button x:Name="ButtonAsserX" Content="AsserX" Grid.Column="3" HorizontalAlignment="Left" Margin="154,70,0,0" Grid.Row="5" VerticalAlignment="Top" Width="100" Height="30" Click="ButtonAsserX_Click" Background="#FFD9EBFD"/>
-        <Button x:Name="ButtonAsserTheta" Content="AsserTheta" Grid.Column="3" HorizontalAlignment="Left" Margin="264,70,0,0" Grid.Row="5" VerticalAlignment="Top" Width="100" Height="30" Background="#FFD9EBFD"/>
+        <Button x:Name="ButtonAsserTheta" Content="AsserTheta" Grid.Column="3" HorizontalAlignment="Left" Margin="264,70,0,0" Grid.Row="5" VerticalAlignment="Top" Width="100" Height="30" Background="#FFD9EBFD" Click="ButtonAsserTheta_Click"/>
     </Grid>
 </Window>

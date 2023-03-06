@@ -347,13 +347,25 @@ namespace RobotInterface
         float promaxX = 0;
         float intmaxX = 0;
         float dermaxX = 0;
+        float consigneX = 0;
+        float erreurX = 0;
+        float commandeX = 0;
+        float corrPX = 0;
+        float corrIX = 0;
+        float corrDX = 0;
+
         float kpT = 0;
         float kiT = 0;
         float kdT = 0;
         float promaxT = 0;
         float intmaxT = 0;
         float dermaxT = 0;
-
+        float consigneT = 0;
+        float erreurT = 0;
+        float commandeT = 0;
+        float corrPT = 0;
+        float corrIT = 0;
+        float corrDT = 0;
 
         void ProcessDecodedMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
@@ -460,7 +472,12 @@ namespace RobotInterface
                     float promax = BitConverter.ToSingle(msgPayload, 13);
                     float intmax = BitConverter.ToSingle(msgPayload, 17);
                     float dermax = BitConverter.ToSingle(msgPayload, 21);
-
+                    float consigne = BitConverter.ToSingle(msgPayload, 25);
+                    float erreur = BitConverter.ToSingle(msgPayload, 29);
+                    float commande = BitConverter.ToSingle(msgPayload, 33);
+                    float corrP = BitConverter.ToSingle(msgPayload, 37);
+                    float corrI = BitConverter.ToSingle(msgPayload, 41);
+                    float corrD = BitConverter.ToSingle(msgPayload, 45);
 
                     if (msgPayload[0] == 0)
                     {
@@ -470,6 +487,12 @@ namespace RobotInterface
                         promaxX = promax;
                         intmaxX = intmax;
                         dermaxX = dermax;
+                        commandeX = commande;
+                        consigneX = consigne;
+                        erreurX = erreur;
+                        corrPX = corrP;
+                        corrIX = corrI;
+                        corrDX = corrD;
                     }
                     else
                     {
@@ -479,9 +502,19 @@ namespace RobotInterface
                         promaxT = promax;
                         intmaxT = intmax;
                         dermaxT = dermax;
+                        commandeT = commande;
+                        consigneT = consigne;
+                        erreurT = erreur;
+                        corrPT = corrP;
+                        corrIT = corrI;
+                        corrDT = corrD;
                     }
                     asservSpeedDisplay.UpdatePolarSpeedCorrectionGains(kpX, kpT, kiX, kiT, kdX, kdT);
                     asservSpeedDisplay.UpdatePolarSpeedCorrectionLimits(promaxX, promaxT, intmaxX, intmaxT, dermaxX, dermaxT);
+                    asservSpeedDisplay.UpdatePolarSpeedCommandValues(commandeX, commandeT);
+                    asservSpeedDisplay.UpdatePolarSpeedConsigneValues(consigneX, consigneT);
+                    asservSpeedDisplay.UpdatePolarSpeedCorrectionValues(corrPX, corrPT, corrIX, corrIT, corrDX, corrDT);
+                    asservSpeedDisplay.UpdatePolarSpeedErrorValues(erreurX, erreurT);
                     break;
 
             }
@@ -538,6 +571,7 @@ namespace RobotInterface
             float propmax = 15.63f;
             float intmax = 2.34f;
             float dermax = 8.67f;
+            float consigne = 18.56f;
 
             byte[] tkp = BitConverter.GetBytes(kp);
             byte[] tki = BitConverter.GetBytes(ki);
@@ -545,8 +579,9 @@ namespace RobotInterface
             byte[] tpropmax = BitConverter.GetBytes(propmax);
             byte[] tintmax = BitConverter.GetBytes(intmax);
             byte[] tdermax = BitConverter.GetBytes(dermax);
+            byte[] tconsigne = BitConverter.GetBytes(consigne);
 
-            byte[] tabasx= new byte[25];
+            byte[] tabasx= new byte[29];
             tabasx[0] = 0;
             Array.Copy(tkp, 0, tabasx, 1, 4);
             Array.Copy(tki, 0, tabasx, 5, 4);
@@ -554,6 +589,7 @@ namespace RobotInterface
             Array.Copy(tpropmax, 0, tabasx, 13, 4);
             Array.Copy(tintmax, 0, tabasx, 17, 4);
             Array.Copy(tdermax, 0, tabasx, 21, 4);
+            Array.Copy(tconsigne, 0, tabasx, 25, 4);
 
             if (atoggle == false)
             {
@@ -565,7 +601,7 @@ namespace RobotInterface
                 ButtonAsserX.Background = Brushes.Coral;
                 atoggle = false;
             }
-            UartEncodeAndSendMessage(0x0063, 25, tabasx);
+            UartEncodeAndSendMessage(0x0063, 29, tabasx);
         }
 
         private void ButtonAsserTheta_Click(object sender, RoutedEventArgs e)
@@ -576,6 +612,7 @@ namespace RobotInterface
             float propmax = 18.93f;
             float intmax = 5.7f;
             float dermax = 12.66f;
+            float consigne = 0.135f;
 
             byte[] tkp = BitConverter.GetBytes(kp);
             byte[] tki = BitConverter.GetBytes(ki);
@@ -583,8 +620,9 @@ namespace RobotInterface
             byte[] tpropmax = BitConverter.GetBytes(propmax);
             byte[] tintmax = BitConverter.GetBytes(intmax);
             byte[] tdermax = BitConverter.GetBytes(dermax);
+            byte[] tconsigne = BitConverter.GetBytes(consigne);
 
-            byte[] tabasx = new byte[25];
+            byte[] tabasx = new byte[29];
             tabasx[0] = 1;
             Array.Copy(tkp, 0, tabasx, 1, 4);
             Array.Copy(tki, 0, tabasx, 5, 4);
@@ -592,6 +630,7 @@ namespace RobotInterface
             Array.Copy(tpropmax, 0, tabasx, 13, 4);
             Array.Copy(tintmax, 0, tabasx, 17, 4);
             Array.Copy(tdermax, 0, tabasx, 21, 4);
+            Array.Copy(tconsigne, 0, tabasx, 25, 4);
 
             if (btoggle == false)
             {
@@ -603,7 +642,7 @@ namespace RobotInterface
                 ButtonAsserX.Background = Brushes.Coral;
                 btoggle = false;
             }
-            UartEncodeAndSendMessage(0x0063, 25, tabasx);
+            UartEncodeAndSendMessage(0x0063, 29, tabasx);
         }
     }
 }

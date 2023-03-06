@@ -49,7 +49,7 @@ unsigned char msgDecodedPayload[128];
 int msgDecodedPayloadIndex = 0;
 unsigned char receivedChecksum;
 unsigned char calculatedChecksum;
-double kp, ki, kd, pro;
+double kp, ki, kd, pro, consigne;
 
 void UartDecodeMessage(unsigned char c) {
     switch (rcvState) {
@@ -117,6 +117,7 @@ unsigned char tkd[4];
 unsigned char tpropmax[4];
 unsigned char tintmax[4];
 unsigned char tdermax[4];
+unsigned char tconsigne[4];
 
 void UartProcessDecodedMessage(int function,
         int payloadLength, unsigned char* payload) {
@@ -160,19 +161,25 @@ void UartProcessDecodedMessage(int function,
             tdermax[2]=payload[23];
             tdermax[3]=payload[24];
             
+            tconsigne[0]=payload[25];
+            tconsigne[1]=payload[26];
+            tconsigne[2]=payload[27];
+            tconsigne[3]=payload[28];
+            
             kp = getFloat(tkp, 0);
             ki= getFloat(tki, 0);
             kd=getFloat(tkd, 0);
             proportionelleMax=getFloat(tpropmax, 0);
             integralMax=getFloat(tintmax, 0);
             deriveeMax=getFloat(tdermax, 0);
+            consigne = getFloat(tconsigne, 0);
             
             if(payload[0]==0){
-            SetupPidAsservissement(&robotState.PidX, kp, ki, kd);
+            SetupPidAsservissement(&robotState.PidX, kp, ki, kd, consigne);
             SendPidAsservissement(&robotState.PidX);
             }
             else{
-                SetupPidAsservissement(&robotState.PidTheta, kp, ki, kd);
+                SetupPidAsservissement(&robotState.PidTheta, kp, ki, kd, consigne);
                 SendPidAsservissement(&robotState.PidTheta);
             }
                        

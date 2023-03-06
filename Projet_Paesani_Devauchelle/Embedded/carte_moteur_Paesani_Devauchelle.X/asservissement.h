@@ -9,7 +9,11 @@ double Kd;
 double erreurProportionelleMax;
 double erreurIntegraleMax;
 double erreurDeriveeMax;
+double erreurProportionel;
 double erreurIntegrale;
+double erreurDerivee;
+double consigne;
+double commande;
 double epsilon_1;
 double erreur;
 //For Debug only
@@ -22,8 +26,10 @@ extern double proportionelleMax;
 extern double integralMax;
 extern double deriveeMax;
 
-void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd);
+void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double consigne);
 void SendPidAsservissement(volatile PidCorrector* PidCorr);
-
+void SendCorrPID(volatile PidCorrector* PidCorr);
+double Correcteur(volatile PidCorrector* PidCorr, double erreur);
+void UpdateAsservissement();
 #endif	/* ASSERVISSEMENT_H */
 

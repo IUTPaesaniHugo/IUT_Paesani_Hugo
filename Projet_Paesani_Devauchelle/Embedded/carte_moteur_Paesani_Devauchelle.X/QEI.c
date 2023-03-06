@@ -1,4 +1,5 @@
 #include <xc.h>
+#include "QEI.h"
 #include "IO.h"
 #include "Robot.h"
 #include <math.h>
@@ -7,7 +8,6 @@
 #include "timer.h"
 
 #define DISTROUES 281.2
-#define FREQ_ECH_QEI 250
 #define POSITION_DATA 0x0061
 
 double QeiDroitPosition_T_1;

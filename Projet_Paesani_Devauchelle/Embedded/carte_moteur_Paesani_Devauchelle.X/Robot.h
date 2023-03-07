@@ -1,6 +1,8 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
+#define DISTROUES 0.2812
+
 #include "asservissement.h"
 
 typedef struct robotStateBITS {
@@ -32,8 +34,8 @@ typedef struct robotStateBITS {
             PidCorrector PidX;
             PidCorrector PidTheta;
             
-            double xCorrectionVitessePourcent;
-            double thetaCorrectionVitessePourcent;
+            double vitesseLineaireCommand;
+            double vitesseAngulaireCommand;
         }
         ;
     }

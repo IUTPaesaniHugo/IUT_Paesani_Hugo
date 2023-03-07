@@ -176,11 +176,11 @@ void UartProcessDecodedMessage(int function,
             
             if(payload[0]==0){
             SetupPidAsservissement(&robotState.PidX, kp, ki, kd, consigne);
-            SendPidAsservissement(&robotState.PidX);
+            SendPidAsservissementCst(&robotState.PidX);
             }
             else{
                 SetupPidAsservissement(&robotState.PidTheta, kp, ki, kd, consigne);
-                SendPidAsservissement(&robotState.PidTheta);
+                SendPidAsservissementCst(&robotState.PidTheta);
             }
                        
         default:

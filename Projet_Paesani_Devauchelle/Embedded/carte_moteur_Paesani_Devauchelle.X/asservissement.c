@@ -19,17 +19,9 @@ void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki
     PidCorr->erreurIntegraleMax = integralMax; //On limite la correction due au Ki
     PidCorr->Kd = Kd;
     PidCorr->erreurDeriveeMax = deriveeMax;
-    PidCorr->consigne = consigne;
-    PidCorr->commande = 12.90;
-    PidCorr->erreur = PidCorr->commande * 3;
-    PidCorr->corrP = 20.75;
-    PidCorr->corrI = 2.19;
-    PidCorr->corrD = 9.11;
-
-
 }
 
-void SendPidAsservissement(volatile PidCorrector* PidCorr) {
+void SendPidAsservissementCst(volatile PidCorrector* PidCorr) {
     double Kp, Ki, Kd, proportionelleMax, integralMax, deriveeMax, consigne, corrP, corrI, corrD;
     double erreur, commande;
     unsigned char message[49];
@@ -69,37 +61,56 @@ void SendPidAsservissement(volatile PidCorrector* PidCorr) {
     UartEncodeAndSendMessage(0x0063, 49, message);
 }
 
-void SendCorrAsservissement(volatile PidCorrector* PidCorr) {
-    
-    
-}
-
-
-
 double Correcteur(volatile PidCorrector* PidCorr, double erreur) {
     PidCorr->erreur = erreur;
     double erreurProportionnelle = LimitToInterval(PidCorr->erreur, -PidCorr->erreurProportionelleMax / PidCorr->Kp, PidCorr->erreurProportionelleMax / PidCorr->Kp);
     PidCorr->corrP = PidCorr->Kp*erreurProportionnelle;
 
-    PidCorr->erreurIntegrale += PidCorr->erreur / FREQ_ECH_QEI;
-    PidCorr->erreurIntegrale = LimitToInterval(PidCorr->erreurIntegrale, -PidCorr->erreurIntegraleMax / PidCorr->Ki, PidCorr->erreurIntegraleMax / PidCorr->Ki);
+    PidCorr->erreurIntegrale = PidCorr->erreurIntegrale + (PidCorr->erreur / FREQ_ECH_QEI);
+    //PidCorr->erreurIntegrale = LimitToInterval(PidCorr->erreurIntegrale, -PidCorr->erreurIntegraleMax / PidCorr->Ki, PidCorr->erreurIntegraleMax / PidCorr->Ki);
     PidCorr->corrI = PidCorr->Ki * PidCorr->erreurIntegrale;
-    
+
     double erreurDerivee = (erreur - PidCorr->epsilon_1) * FREQ_ECH_QEI;
     double deriveeBornee = LimitToInterval(erreurDerivee, -PidCorr->erreurDeriveeMax / PidCorr->Kd, PidCorr->erreurDeriveeMax / PidCorr->Kd);
+
+    PidCorr->corrD = deriveeBornee * PidCorr->Kd; // erreurDerivee * PidCorr->Kd;
+    double seuil = 2;
+    if (PidCorr->corrD > seuil)
+        PidCorr->corrD -= seuil;
+    else if (PidCorr->corrD<-seuil)
+        PidCorr->corrD += seuil;
+    else
+        PidCorr->corrD = 0;
+
     PidCorr->epsilon_1 = erreur;
-    PidCorr->corrD = deriveeBornee * PidCorr->Kd;
     return PidCorr->corrP + PidCorr->corrI + PidCorr->corrD;
 }
 
 void UpdateAsservissement() {
-    double erreurLin = robotState.PidX.consigne - robotState.vitesseLineaireFromOdometry;
-    robotState.xCorrectionVitessePourcent = Correcteur(&robotState.PidX, erreurLin);
-    
-    double erreurAng = robotState.PidTheta.consigne - robotState.vitesseAngulaireFromOdometry;
-    robotState.thetaCorrectionVitessePourcent = Correcteur(&robotState.PidTheta, erreurAng);
-    
-    
-    PWMSetSpeedConsignePolaire(robotState.xCorrectionVitessePourcent,
-            robotState.thetaCorrectionVitessePourcent);
+    robotState.PidX.erreur = robotState.PidX.consigne - robotState.vitesseLineaireFromOdometry;
+    robotState.vitesseLineaireCommand = Correcteur(&robotState.PidX, robotState.PidX.erreur);
+
+    robotState.PidTheta.erreur = robotState.PidTheta.consigne - robotState.vitesseAngulaireFromOdometry;
+    robotState.vitesseAngulaireCommand = Correcteur(&robotState.PidTheta, robotState.PidTheta.erreur);
+
+    double CoeffVitesseToPercent = 50;
+    robotState.vitesseGaucheConsigne = CoeffVitesseToPercent * (robotState.vitesseLineaireCommand - DISTROUES / 2 * robotState.vitesseAngulaireCommand);
+    robotState.vitesseDroiteConsigne = CoeffVitesseToPercent * (robotState.vitesseLineaireCommand + DISTROUES / 2 * robotState.vitesseAngulaireCommand);
+
+}
+
+void SendVariableAsserv() {
+    unsigned char message[40];
+    getBytesFromFloat(message, 0, robotState.PidX.erreur);
+    getBytesFromFloat(message, 4, robotState.PidTheta.erreur);
+    getBytesFromFloat(message, 8, robotState.PidX.corrP + robotState.PidX.corrI + robotState.PidX.corrD);
+    getBytesFromFloat(message, 12, robotState.PidTheta.corrP + robotState.PidTheta.corrI + robotState.PidTheta.corrD);
+    getBytesFromFloat(message, 16, robotState.PidX.corrP);
+    getBytesFromFloat(message, 20, robotState.PidTheta.corrP);
+    getBytesFromFloat(message, 24, robotState.PidX.corrI);
+    getBytesFromFloat(message, 28, robotState.PidTheta.corrI);
+    getBytesFromFloat(message, 32, robotState.PidX.corrD);
+    getBytesFromFloat(message, 36, robotState.PidTheta.corrD);
+
+    UartEncodeAndSendMessage(0x0064, 40, message);
 }

@@ -6,6 +6,8 @@
 #include "main.h"
 #include "UART_Protocol.h"
 #include "QEI.h"
+#include "asservissement.h"
+
 int compt=0;
 unsigned long timestamp=0;
 //Initialisation d?un timer 32 bits
@@ -79,9 +81,11 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     PWMUpdateSpeed();
     ADC1StartConversionSequence();
     QEIUpdateData();
+    UpdateAsservissement();
     compt++;
     if(compt%25==0){
         SendPositionData();
+        SendVariableAsserv();
     }
 }
 

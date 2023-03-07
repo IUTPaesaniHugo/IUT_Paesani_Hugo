@@ -314,7 +314,9 @@ namespace RobotInterface
             SetRobotState=0x0051,
             SetRobotManualControl=0x0052,
             PositionData=0x0061,
-            Asservissement=0x0063
+            AsservissementCst=0x0063,
+            AsservissementVar=0x0064
+
         }
 
         public enum StateRobot
@@ -464,7 +466,7 @@ namespace RobotInterface
                     VitAng.Content = robot.vitAngOdo;
                     break;
 
-                case (int)MsgFunction.Asservissement:
+                case (int)MsgFunction.AsservissementCst:
                     
                     float kp = BitConverter.ToSingle(msgPayload, 1);
                     float ki = BitConverter.ToSingle(msgPayload, 5);
@@ -517,6 +519,17 @@ namespace RobotInterface
                     asservSpeedDisplay.UpdatePolarSpeedErrorValues(erreurX, erreurT);
                     break;
 
+                  case (int)MsgFunction.AsservissementVar:
+                    asservSpeedDisplay.UpdatePolarSpeedErrorValues(BitConverter.ToSingle(msgPayload, 0), BitConverter.ToSingle(msgPayload, 4));
+                    asservSpeedDisplay.UpdatePolarSpeedCommandValues(BitConverter.ToSingle(msgPayload, 8), BitConverter.ToSingle(msgPayload, 12));
+                    var corrXP = BitConverter.ToSingle(msgPayload, 16);
+                    var corrThetaP = BitConverter.ToSingle(msgPayload, 20);
+                    var corrXI = BitConverter.ToSingle(msgPayload, 24);
+                    var corrThetaI = BitConverter.ToSingle(msgPayload, 28);
+                    var corrXD = BitConverter.ToSingle(msgPayload, 32);
+                    var corrThetaD = BitConverter.ToSingle(msgPayload, 36);
+                    asservSpeedDisplay.UpdatePolarSpeedCorrectionValues(corrXP, corrThetaP, corrXI, corrThetaI, corrXD, corrThetaD);
+                    break;
             }
         }
 
@@ -565,13 +578,13 @@ namespace RobotInterface
 
         private void ButtonAsserX_Click(object sender, RoutedEventArgs e)
         {
-            float kp = 0.75f;
-            float ki = 1.08f;
-            float kd = 0.29f;
-            float propmax = 15.63f;
-            float intmax = 2.34f;
-            float dermax = 8.67f;
-            float consigne = 18.56f;
+            float kp = 20f;
+            float ki = 80f;
+            float kd = 0f;
+            float propmax = 1000f;
+            float intmax = 1000f;
+            float dermax = 1000f;
+            float consigne = 0f;
 
             byte[] tkp = BitConverter.GetBytes(kp);
             byte[] tki = BitConverter.GetBytes(ki);
@@ -606,13 +619,13 @@ namespace RobotInterface
 
         private void ButtonAsserTheta_Click(object sender, RoutedEventArgs e)
         {
-            float kp = 1.8f;
-            float ki = 0.28f;
-            float kd = 3.93f;
-            float propmax = 18.93f;
-            float intmax = 5.7f;
-            float dermax = 12.66f;
-            float consigne = 0.135f;
+            float kp = 10f;
+            float ki = 30f;
+            float kd = 0f;
+            float propmax = 1000f;
+            float intmax = 1000f;
+            float dermax = 1000f;
+            float consigne = 0f;
 
             byte[] tkp = BitConverter.GetBytes(kp);
             byte[] tki = BitConverter.GetBytes(ki);

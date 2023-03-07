@@ -27,9 +27,9 @@ extern double integralMax;
 extern double deriveeMax;
 
 void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double consigne);
-void SendPidAsservissement(volatile PidCorrector* PidCorr);
-void SendCorrPID(volatile PidCorrector* PidCorr);
+void SendPidAsservissementCst(volatile PidCorrector* PidCorr);
 double Correcteur(volatile PidCorrector* PidCorr, double erreur);
+void SendVariableAsserv();
 void UpdateAsservissement();
 #endif	/* ASSERVISSEMENT_H */
 

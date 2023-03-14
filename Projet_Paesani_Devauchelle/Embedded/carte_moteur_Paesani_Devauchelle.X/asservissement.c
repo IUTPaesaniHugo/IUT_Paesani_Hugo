@@ -96,7 +96,6 @@ void UpdateAsservissement() {
     double CoeffVitesseToPercent = 50;
     robotState.vitesseGaucheConsigne = CoeffVitesseToPercent * (robotState.vitesseLineaireCommand - DISTROUES / 2 * robotState.vitesseAngulaireCommand);
     robotState.vitesseDroiteConsigne = CoeffVitesseToPercent * (robotState.vitesseLineaireCommand + DISTROUES / 2 * robotState.vitesseAngulaireCommand);
-
 }
 
 void SendVariableAsserv() {

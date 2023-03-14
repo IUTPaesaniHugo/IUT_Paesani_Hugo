@@ -619,8 +619,8 @@ namespace RobotInterface
 
         private void ButtonAsserTheta_Click(object sender, RoutedEventArgs e)
         {
-            float kp = 10f;
-            float ki = 30f;
+            float kp = 6f;
+            float ki = 19f;
             float kd = 0f;
             float propmax = 1000f;
             float intmax = 1000f;
@@ -648,7 +648,7 @@ namespace RobotInterface
             if (btoggle == false)
             {
                 ButtonAsserX.Background = Brushes.Aquamarine;
-                atoggle = true;
+                btoggle = true;
             }
             else
             {

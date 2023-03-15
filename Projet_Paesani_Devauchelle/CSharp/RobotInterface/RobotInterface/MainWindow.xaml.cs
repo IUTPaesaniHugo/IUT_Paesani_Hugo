@@ -369,6 +369,8 @@ namespace RobotInterface
         float corrIT = 0;
         float corrDT = 0;
 
+        PID PIDx = new PID();
+        PID PIDt = new PID();
         void ProcessDecodedMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
             switch (msgFunction)
@@ -483,52 +485,56 @@ namespace RobotInterface
 
                     if (msgPayload[0] == 0)
                     {
-                        kpX = kp;
-                        kiX = ki;
-                        kdX = kd;
-                        promaxX = promax;
-                        intmaxX = intmax;
-                        dermaxX = dermax;
-                        commandeX = commande;
-                        consigneX = consigne;
-                        erreurX = erreur;
-                        corrPX = corrP;
-                        corrIX = corrI;
-                        corrDX = corrD;
+                        PIDx.kp = kp;
+                        PIDx.ki = ki;
+                        PIDx.kd = kd;
+                        PIDx.promax = promax;
+                        PIDx.intmax = intmax;
+                        PIDx.dermax = dermax;
+                        PIDx.commande = commande;
+                        PIDx.consigne = consigne;
+                        PIDx.erreur = erreur;
+                        PIDx.corrP = corrP;
+                        PIDx.corrI = corrI;
+                        PIDx.corrD = corrD;
                     }
                     else
                     {
-                        kpT = kp;
-                        kiT = ki;
-                        kdT = kd;
-                        promaxT = promax;
-                        intmaxT = intmax;
-                        dermaxT = dermax;
-                        commandeT = commande;
-                        consigneT = consigne;
-                        erreurT = erreur;
-                        corrPT = corrP;
-                        corrIT = corrI;
-                        corrDT = corrD;
+                        PIDt.kp = kp;
+                        PIDt.ki = ki;
+                        PIDt.kd = kd;
+                        PIDt.promax = promax;
+                        PIDt.intmax = intmax;
+                        PIDt.dermax = dermax;
+                        PIDt.commande = commande;
+                        PIDt.consigne = consigne;
+                        PIDt.erreur = erreur;
+                        PIDt.corrP = corrP;
+                        PIDt.corrI = corrI;
+                        PIDt.corrD = corrD;
                     }
-                    asservSpeedDisplay.UpdatePolarSpeedCorrectionGains(kpX, kpT, kiX, kiT, kdX, kdT);
-                    asservSpeedDisplay.UpdatePolarSpeedCorrectionLimits(promaxX, promaxT, intmaxX, intmaxT, dermaxX, dermaxT);
-                    asservSpeedDisplay.UpdatePolarSpeedCommandValues(commandeX, commandeT);
-                    asservSpeedDisplay.UpdatePolarSpeedConsigneValues(consigneX, consigneT);
-                    asservSpeedDisplay.UpdatePolarSpeedCorrectionValues(corrPX, corrPT, corrIX, corrIT, corrDX, corrDT);
-                    asservSpeedDisplay.UpdatePolarSpeedErrorValues(erreurX, erreurT);
+                    asservSpeedDisplay.UpdatePolarSpeedCorrectionGains(PIDx.kp, PIDt.kp, PIDx.ki, PIDt.ki, PIDx.kd, PIDt.kd);
+                    asservSpeedDisplay.UpdatePolarSpeedCorrectionLimits(PIDx.promax, PIDt.promax, PIDx.intmax, PIDt.intmax, PIDx.dermax, PIDt.dermax);
+                    asservSpeedDisplay.UpdatePolarSpeedCommandValues(PIDx.commande, PIDt.commande);
+                    asservSpeedDisplay.UpdatePolarSpeedConsigneValues(PIDx.consigne, PIDt.consigne);
+                    asservSpeedDisplay.UpdatePolarSpeedCorrectionValues(PIDx.corrP, PIDt.corrP, PIDx.corrI, PIDt.corrI, PIDx.corrD, PIDt.corrD);
+                    asservSpeedDisplay.UpdatePolarSpeedErrorValues(PIDx.erreur, PIDt.erreur);
                     break;
 
                   case (int)MsgFunction.AsservissementVar:
-                    asservSpeedDisplay.UpdatePolarSpeedErrorValues(BitConverter.ToSingle(msgPayload, 0), BitConverter.ToSingle(msgPayload, 4));
-                    asservSpeedDisplay.UpdatePolarSpeedCommandValues(BitConverter.ToSingle(msgPayload, 8), BitConverter.ToSingle(msgPayload, 12));
-                    var corrXP = BitConverter.ToSingle(msgPayload, 16);
-                    var corrThetaP = BitConverter.ToSingle(msgPayload, 20);
-                    var corrXI = BitConverter.ToSingle(msgPayload, 24);
-                    var corrThetaI = BitConverter.ToSingle(msgPayload, 28);
-                    var corrXD = BitConverter.ToSingle(msgPayload, 32);
-                    var corrThetaD = BitConverter.ToSingle(msgPayload, 36);
-                    asservSpeedDisplay.UpdatePolarSpeedCorrectionValues(corrXP, corrThetaP, corrXI, corrThetaI, corrXD, corrThetaD);
+                    PIDx.erreur = BitConverter.ToSingle(msgPayload, 0);
+                    PIDt.erreur = BitConverter.ToSingle(msgPayload, 4);
+                    PIDx.commande = BitConverter.ToSingle(msgPayload, 8);
+                    PIDt.commande = BitConverter.ToSingle(msgPayload, 12);
+                    PIDx.corrP = BitConverter.ToSingle(msgPayload, 16);
+                    PIDt.corrP = BitConverter.ToSingle(msgPayload, 20);
+                    PIDx.corrI = BitConverter.ToSingle(msgPayload, 24);
+                    PIDt.corrI = BitConverter.ToSingle(msgPayload, 28);
+                    PIDx.corrD = BitConverter.ToSingle(msgPayload, 32);
+                    PIDt.corrD= BitConverter.ToSingle(msgPayload, 36);
+                    asservSpeedDisplay.UpdatePolarSpeedErrorValues(PIDx.erreur, PIDt.erreur);
+                    asservSpeedDisplay.UpdatePolarSpeedCommandValues(PIDx.commande, PIDt.commande);
+                    asservSpeedDisplay.UpdatePolarSpeedCorrectionValues(PIDx.corrP, PIDt.corrP, PIDx.corrI, PIDt.corrI, PIDx.corrD, PIDt.corrD);
                     break;
             }
         }
@@ -647,12 +653,12 @@ namespace RobotInterface
 
             if (btoggle == false)
             {
-                ButtonAsserX.Background = Brushes.Aquamarine;
+                ButtonAsserTheta.Background = Brushes.Aquamarine;
                 btoggle = true;
             }
             else
             {
-                ButtonAsserX.Background = Brushes.Coral;
+                ButtonAsserTheta.Background = Brushes.Coral;
                 btoggle = false;
             }
             UartEncodeAndSendMessage(0x0063, 29, tabasx);
